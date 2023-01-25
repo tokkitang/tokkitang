@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { login } from '../../api/auth/login';
+	import { login } from '../../lib/api/auth/login';
+	import GithubLogin from '../../lib/components/GithubLogin.svelte';
 
 	export let email: string;
 	export let password: string;
@@ -33,6 +34,7 @@
 	password<input id="password" type="password" bind:value={password} /> <br />
 	<button on:click={doLogin}>Login</button> <br />
 
+	<GithubLogin/>
 	<a
 		href="https://github.com/login/oauth/authorize?client_id=09c53661153af8c5b13c&redirect_uri=https://ksauqt5f5er2djql3atquzas4e0ofpla.lambda-url.ap-northeast-2.on.aws/redirect/github"
 		>Login with Github</a
