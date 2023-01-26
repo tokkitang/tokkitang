@@ -1,6 +1,7 @@
 import { dev } from '$app/environment';
 import { redirect, type LoadEvent } from '@sveltejs/kit';
 import { getGithubAccessToken } from '../../../lib/api/auth/get-github-token';
+import { getGithubUser } from '../../../lib/api/auth/get-github-user';
 import { githubLogin } from '../../../lib/api/auth/github-login';
 import { setCookie } from '../../../lib/utils/cookie';
 
@@ -24,6 +25,14 @@ export async function load({ url }: LoadEvent) {
 			setCookie('access_token', githubLoginResponse.access_token);
 		} else {
 			if (githubLoginResponse.need_signup) {
+				const githubUserInfo = await getGithubUser(githubAccessToken);
+				if (
+					githubUserInfo.email == null ||
+					githubUserInfo.name == null ||
+					githubUserInfo.id == null
+				) {
+				}
+
 				throw redirect(302, '/signup?github=true');
 			} else {
 				alert('로그인 실패. 존재하지 않는 계정');
