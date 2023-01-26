@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { login } from '../api/auth/login';
+	import { setCookie } from '../utils/cookie'
 
 	export let email: string;
 	export let password: string;
@@ -15,6 +16,8 @@
 		if (loginResponse.success) {
 			alert('로그인에 성공했습니다.');
 			console.log(loginResponse.access_token);
+
+			setCookie('access_token', loginResponse.access_token);
 		} else {
 			alert('로그인에 실패했습니다.');
 		}
