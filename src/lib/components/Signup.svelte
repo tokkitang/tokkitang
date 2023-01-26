@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { login } from '../api/auth/login';
+	import { signup } from '../api/auth/signup';
 	import { setCookie } from '../utils/cookie'
 
 	export let nickname: string;
@@ -16,19 +16,23 @@
 		if (!password) {
 			alert('비밀번호를 입력해주세요');
 		}
-		const loginResponse = await login(email, password);
-		if (loginResponse.success) {
-			alert('로그인에 성공했습니다.');
-			console.log(loginResponse.access_token);
 
-			setCookie('access_token', loginResponse.access_token);
+		const signupResponse = await signup(nickname, email, password);
+		if (signupResponse.success) {
+			alert('회원가입에 성공했습니다.');
+			console.log(signupResponse.access_token);
+
+			setCookie('access_token', signupResponse.access_token);
+		} else if(signupResponse.email_duplicate) {
+			alert('이미 존재하는 계정입니다.');
 		} else {
-			alert('로그인에 실패했습니다.');
+			alert('회원가입에 실패했습니다.');
 		}
 	}
 </script>
 
 <main>
+	nickname: <input id="nickname" type="text" bind:value={nickname} /> <br />
 	email: <input id="email" type="email" bind:value={email} /> <br />
 	password: <input id="password" type="password" bind:value={password} /> <br />
 	<button on:click={doSignup}>Sign up</button> <br />

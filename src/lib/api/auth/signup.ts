@@ -1,11 +1,12 @@
 import ky from 'ky';
 
 export type SignupResponse = {
-	user_id: string;
+	success: boolean;
+	access_token: string;
 	email_duplicate: boolean;
 };
 
-export async function login(
+export async function signup(
 	nickname: string,
 	email: string,
 	password: string
