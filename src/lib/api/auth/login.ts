@@ -1,5 +1,4 @@
 import ky from 'ky';
-import { mainServerUrl } from '../setting';
 
 export type LoginResponse = {
 	success: boolean;
