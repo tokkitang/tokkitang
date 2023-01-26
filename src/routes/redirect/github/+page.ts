@@ -53,18 +53,18 @@ export async function load({ url }: LoadEvent) {
 						alert('가입 실패');
 						throw redirect(302, '/');
 					}
-				}
+				} else {
+					let query = `?github=true`;
 
-				let query = `?github=true`;
+					if (githubUserInfo.email != null) {
+						query += `&email=${githubUserInfo.email}`;
+					}
+					if (githubUserInfo.name != null) {
+						query += `&nickname=${githubUserInfo.name}`;
+					}
 
-				if (githubUserInfo.email != null) {
-					query += `&email=${githubUserInfo.email}`;
+					throw redirect(302, `/signup${query}`);
 				}
-				if (githubUserInfo.name != null) {
-					query += `&nickname=${githubUserInfo.name}`;
-				}
-
-				throw redirect(302, `/signup${query}`);
 			} else {
 				alert('로그인 실패. 존재하지 않는 계정');
 				throw redirect(302, '/');

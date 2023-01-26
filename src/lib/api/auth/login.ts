@@ -6,8 +6,7 @@ export type LoginResponse = {
 };
 
 export async function login(email: string, password: string): Promise<LoginResponse> {
-	const response = await ky.post('auth/login', {
-		prefixUrl: 'api',
+	const response = await ky.post('/api/auth/login', {
 		json: { email, password }
 	});
 

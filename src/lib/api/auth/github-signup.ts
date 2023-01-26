@@ -11,8 +11,7 @@ export async function githubSignup(
 	email: string,
 	access_token: string
 ): Promise<GithubSignupResponse> {
-	const response = await ky.post('user/signup/github', {
-		prefixUrl: 'api',
+	const response = await ky.post('/api/user/signup/github', {
 		json: { email, access_token, nickname }
 	});
 

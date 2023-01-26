@@ -11,8 +11,7 @@ export async function signup(
 	email: string,
 	password: string
 ): Promise<SignupResponse> {
-	const response = await ky.post('user/signup', {
-		prefixUrl: 'api',
+	const response = await ky.post('/api/user/signup', {
 		json: { email, password, nickname }
 	});
 

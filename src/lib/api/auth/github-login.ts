@@ -7,8 +7,7 @@ export type GithubLoginResponse = {
 };
 
 export async function githubLogin(access_token: string): Promise<GithubLoginResponse> {
-	const response = await ky.post('auth/login/github', {
-		prefixUrl: 'api',
+	const response = await ky.post('/api/auth/login/github', {
 		json: { access_token }
 	});
 
