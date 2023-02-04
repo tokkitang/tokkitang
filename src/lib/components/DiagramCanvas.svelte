@@ -2,17 +2,30 @@
 	import { onMount } from 'svelte';
 	import Konva from 'konva';
 
+	let stage: Konva.Stage;
+	let layer: Konva.Layer;
+
 	onMount(() => {
-		var stage = new Konva.Stage({
+		stage = new Konva.Stage({
 			container: 'canvas',
 			width: window.innerWidth,
 			height: window.innerHeight
 		});
 
 		// add canvas element
-		var layer = new Konva.Layer();
+		layer = new Konva.Layer();
 		stage.add(layer);
 
+		// // add cursor styling
+		// box.on('mouseover', function () {
+		// 	document.body.style.cursor = 'pointer';
+		// });
+		// box.on('mouseout', function () {
+		// 	document.body.style.cursor = 'default';
+		// });
+	});
+
+	export async function createEntity() {
 		// create shape
 		var box = new Konva.Rect({
 			x: 50,
@@ -25,22 +38,12 @@
 			draggable: true
 		});
 		layer.add(box);
-
-		// add cursor styling
-		box.on('mouseover', function () {
-			document.body.style.cursor = 'pointer';
-		});
-		box.on('mouseout', function () {
-			document.body.style.cursor = 'default';
-		});
-	});
+	}
 </script>
 
 <main>
+	<button on:click={createEntity}>Create Entity</button>
 	<div id="canvas" />
-
-	<script>
-	</script>
 </main>
 
 <style>
