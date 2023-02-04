@@ -15,7 +15,8 @@
 	let titleRowFontSize = 20;
 
 	// 엔티티 나머지 행의 세로 크기
-	let rowHeight = 40;
+	let rowHeight = 25;
+	let rowFontSize = 17;
 
 	// 엔티티의 기본 가로 크기
 	let rowDefaultWidth = 300;
@@ -81,12 +82,71 @@
 
 		newEntityGroup.add(titleRowGroup);
 
+		const addRowButton = new Konva.Label({
+			opacity: 0.75
+		});
+		addRowButton.add(
+			new Konva.Text({
+				x: startX,
+				y: startY - 30,
+				text: '+',
+				fontFamily: 'Calibri',
+				fontSize: 25,
+				padding: 2,
+				fill: 'black'
+			})
+		);
+
+		addRowButton.on('click', () => {
+			addRowToEntity(newEntityGroup);
+		});
+
+		newEntityGroup.add(addRowButton);
+
 		layer.add(newEntityGroup);
 
 		// TODO: 서버 연동시에는 서버에서 생성된 id를 받아와야 함
 		// const entityId = Date.now().toString();
 
 		// entityMap.set(entityId, newEntity);
+	}
+
+	export function addRowToEntity(entityGroup: Konva.Group) {
+		const rowCount = entityGroup.getChildren().length;
+
+		console.log(rowCount);
+
+		const startY = titleRowHeight + rowCount * rowHeight;
+
+		const newRowGroup = new Konva.Group({
+			x: startX,
+			y: startY
+		});
+
+		newRowGroup.add(
+			new Konva.Rect({
+				width: rowDefaultWidth,
+				height: rowHeight,
+				fill: 'black',
+				stroke: 'black',
+				strokeWidth: 4
+			})
+		);
+
+		const text = makeInputText(
+			stage,
+			new Konva.Text({
+				width: rowDefaultWidth,
+				height: rowHeight,
+				text: 'Empty',
+				fill: 'white',
+				fontSize: rowFontSize
+			})
+		);
+
+		newRowGroup.add(text);
+
+		entityGroup.add(newRowGroup);
 	}
 </script>
 
