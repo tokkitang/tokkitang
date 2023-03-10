@@ -1,18 +1,8 @@
-# create-svelte
+# tokkitang
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+![](https://img.shields.io/badge/language-Typescript-yellow) ![](https://img.shields.io/badge/framework-sveltekit-brightgreen) ![](https://img.shields.io/badge/css-tailwind-red)
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+page: https://tokkitang.com/
 
 ## Developing
 
