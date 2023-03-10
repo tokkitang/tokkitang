@@ -1,4 +1,4 @@
-import ky from 'ky';
+import { mainApi } from '../setting';
 
 export type SignupResponse = {
 	success: boolean;
@@ -11,7 +11,7 @@ export async function signup(
 	email: string,
 	password: string
 ): Promise<SignupResponse> {
-	const response = await ky.post('/api/user/signup', {
+	const response = await mainApi.post('user/signup', {
 		json: { email, password, nickname }
 	});
 

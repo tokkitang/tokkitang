@@ -1,4 +1,4 @@
-import ky from 'ky';
+import { mainApi } from '../setting';
 
 export type UploadImageResponse = {
 	success: boolean;
@@ -6,7 +6,7 @@ export type UploadImageResponse = {
 };
 
 export async function uploadUserThumbnail(formData: FormData): Promise<UploadImageResponse> {
-	const response = await ky.post('/api/utils/image/upload/user-thumbnail', {
+	const response = await mainApi.post('utils/image/upload/user-thumbnail', {
 		body: formData
 	});
 

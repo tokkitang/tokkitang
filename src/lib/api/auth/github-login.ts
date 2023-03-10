@@ -1,4 +1,4 @@
-import ky from 'ky';
+import { mainApi } from '../setting';
 
 export type GithubLoginResponse = {
 	success: boolean;
@@ -7,7 +7,7 @@ export type GithubLoginResponse = {
 };
 
 export async function githubLogin(access_token: string): Promise<GithubLoginResponse> {
-	const response = await ky.post('/api/auth/login/github', {
+	const response = await mainApi.post('auth/login/github', {
 		json: { access_token }
 	});
 

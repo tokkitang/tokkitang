@@ -1,11 +1,11 @@
-import ky from 'ky';
+import { mainApi } from '../setting';
 
 export type GetGithubTokenResponse = {
 	access_token: string;
 };
 
 export async function getGithubAccessToken(code: string): Promise<GetGithubTokenResponse> {
-	const response = await ky.post('/api/auth/access-token/github', {
+	const response = await mainApi.post('auth/access-token/github', {
 		json: { code }
 	});
 
