@@ -35,7 +35,6 @@
 	}
 
 	export async function uploadImage() {
-		console.log('버튼 눌림');
 		if (files?.[0]) {
 			const formData = new FormData();
 			formData.append('thumbnail', files[0]);
