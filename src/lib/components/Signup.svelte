@@ -19,16 +19,18 @@
 			alert('비밀번호를 입력해주세요');
 		}
 
-		const signupResponse = await signup(nickname, email, password);
-		if (signupResponse.success) {
-			alert('회원가입에 성공했습니다.');
-			console.log(signupResponse.access_token);
+		if (nickname !== null && email !== null && password !== null) {
+			const signupResponse = await signup(nickname, email, password);
+			if (signupResponse.success) {
+				alert('회원가입에 성공했습니다.');
+				console.log(signupResponse.access_token);
 
-			setCookie('access_token', signupResponse.access_token);
-		} else if (signupResponse.email_duplicate) {
-			alert('이미 존재하는 계정입니다.');
-		} else {
-			alert('회원가입에 실패했습니다.');
+				setCookie('access_token', signupResponse.access_token);
+			} else if (signupResponse.email_duplicate) {
+				alert('이미 존재하는 계정입니다.');
+			} else {
+				alert('회원가입에 실패했습니다.');
+			}
 		}
 	}
 
