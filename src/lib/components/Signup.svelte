@@ -3,10 +3,10 @@
 	import { uploadUserThumbnail } from '../api/auth/upload';
 	import { setCookie } from '../utils/cookie';
 
-	export let nickname: string;
-	export let email: string;
-	export let password: string;
-	export let files: FileList;
+	export let nickname: string | null = null;
+	export let email: string | null = null;
+	export let password: string | null = null;
+	export let files: FileList | null = null;
 
 	export async function doSignup() {
 		if (!nickname) {
@@ -51,16 +51,19 @@
 </script>
 
 <main>
-	nickname: <input id="nickname" type="text" bind:value={nickname} /> <br />
-	email: <input id="email" type="email" bind:value={email} /> <br />
-	password: <input id="password" type="password" bind:value={password} /> <br />
+	<form>
+		nickname: <input id="nickname" type="text" bind:value={nickname} /> <br />
+		email: <input id="email" type="email" bind:value={email} /> <br />
+		password: <input id="password" type="password" autoComplete="off" bind:value={password} />
+		<br />
 
-	image: <input id="image" type="file" bind:files />
-	{#if files?.[0]}
-		<p>
-			{files[0].name}
-		</p>
-	{/if}
+		image: <input id="image" type="file" bind:files />
+		{#if files?.[0]}
+			<p>
+				{files[0].name}
+			</p>
+		{/if}
+	</form>
 
 	<button on:click={uploadImage}>이미지만 업로드 테스트</button>
 
