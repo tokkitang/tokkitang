@@ -69,6 +69,12 @@
 	<button on:click={uploadImage}>이미지만 업로드 테스트</button>
 
 	<button on:click={doSignup}>Sign up</button> <br />
+
+	<button
+		on:click={() => {
+			alert('test');
+		}}>test</button
+	> <br />
 </main>
 
 <style>
