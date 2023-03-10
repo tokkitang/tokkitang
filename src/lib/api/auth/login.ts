@@ -1,4 +1,4 @@
-import ky from 'ky';
+import { mainApi } from '../setting';
 
 export type LoginResponse = {
 	success: boolean;
@@ -6,7 +6,7 @@ export type LoginResponse = {
 };
 
 export async function login(email: string, password: string): Promise<LoginResponse> {
-	const response = await ky.post('/api/auth/login', {
+	const response = await mainApi.post('auth/login', {
 		json: { email, password }
 	});
 
