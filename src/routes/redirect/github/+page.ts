@@ -1,4 +1,3 @@
-import { dev } from '$app/environment';
 import { redirect, type LoadEvent } from '@sveltejs/kit';
 import { getGithubAccessToken } from '../../../lib/api/auth/get-github-token';
 import { getGithubUser } from '../../../lib/api/auth/get-github-user';
