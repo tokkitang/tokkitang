@@ -1,9 +1,7 @@
 <script>
-	import DiagramCanvas from '$lib/components/DiagramCanvas.svelte';
 </script>
 
-<h1 class="text-3xl font-bold underline">Hello world!</h1>
-<DiagramCanvas />
+<div class="global-wrapper" />
 
 <style lang="postcss">
 	:global(html) {
