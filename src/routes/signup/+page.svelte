@@ -10,9 +10,5 @@
 <div class="text-column">
 	<h1>Signup Page</h1>
 
-	<hr>
-
-	<Signup/>
-
-	<hr>
+	<Signup />
 </div>
