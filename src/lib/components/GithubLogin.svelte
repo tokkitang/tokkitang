@@ -1,21 +1,38 @@
 <script lang="ts">
 	export let href: string;
+	export let buttonText: string;
 </script>
 
 <main>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
-
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/4.9.2/bootstrap-social.min.css"/>
-
-    <a id="github-button" class="btn btn-block btn-social btn-github" href={href}>
-        <i class="fa fa-github"></i> Login with GitHub
-    </a>
+	<a {href}>
+		<svg viewBox="0 0 24 24" fill="currentColor" class="github-icon">
+			<path
+				d="M12 0a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.4c-3.3.7-4-1.6-4-1.6-.5-1.3-1.2-1.6-1.2-1.6-.9-.6.1-.6.1-.6.8.1 1.2.7 1.2.7.7 1.2 1.9 1 2.4.7.1-.6.4-1.1.6-1.4-2.1-.2-4.3-1.1-4.3-4.9 0-1.1.4-2 1.2-2.7-.1-.2-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.8 9.8 0 0 1 5.2 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.5.1 2.7.8.7 1.2 1.5 1.2 2.7 0 3.8-2.2 4.6-4.3 4.9.3.3.8.8.8 1.8v2.7c0 .3.2.7.9.6A12 12 0 0 0 12 0"
+			/>
+		</svg>
+		{buttonText}
+	</a>
 </main>
 
 <style>
-
+	.github-icon {
+		width: 24px;
+		height: 24px;
+		margin-right: 5px;
+		vertical-align: middle;
+	}
+	a {
+		display: inline-flex;
+		align-items: center;
+		padding: 10px 20px;
+		background-color: #333;
+		color: #fff;
+		text-decoration: none;
+		font-size: 16px;
+		border-radius: 5px;
+		white-space: nowrap;
+	}
+	a:hover {
+		background-color: #555;
+	}
 </style>

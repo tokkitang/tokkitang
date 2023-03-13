@@ -29,12 +29,20 @@
 
 <main>
 	<form>
-		email: <input id="email" type="email" bind:value={email} /> <br />
-		password: <input id="password" type="password" autoComplete="off" bind:value={password} />
-		<br />
+		<div>
+			email: <input id="email" type="email" bind:value={email} />
+		</div>
+		<div>
+			password:<input id="password" type="password" autoComplete="off" bind:value={password} />
+		</div>
 	</form>
 	<button on:click={doLogin}>Login</button> <br />
+
+	Don't have an account? If not, <a class="simple-link" href="/signup">"Sign up"</a>.
 </main>
 
 <style>
+	.simple-link {
+		text-decoration: none;
+	}
 </style>
