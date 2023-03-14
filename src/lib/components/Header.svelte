@@ -2,9 +2,10 @@
 	import { page } from '$app/stores';
 	import logo from '$lib/images/svelte-logo.svg';
 	import login from '$lib/images/login.svg';
+	import type { User } from '../types/User';
 
 	export let isLogin: boolean = false;
-	export let userInfo: boolean | null = null;
+	export let myInfo: User | null = null;
 </script>
 
 <header>
