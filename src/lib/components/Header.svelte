@@ -4,6 +4,7 @@
 	import login from '$lib/images/login.svg';
 
 	export let isLogin: boolean = false;
+	export let userInfo: boolean | null = null;
 </script>
 
 <header>
