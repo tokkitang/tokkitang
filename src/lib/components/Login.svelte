@@ -52,7 +52,7 @@
 			<h1>Login with SSO</h1>
 			<div class="github">
 				<GithubLogin
-					href="https://github.com/login/oauth/authorize?client_id=09c53661153af8c5b13c&redirect_uri=https://ksauqt5f5er2djql3atquzas4e0ofpla.lambda-url.ap-northeast-2.on.aws/redirect/github"
+					href="https://github.com/login/oauth/authorize?client_id=09c53661153af8c5b13c&redirect_uri=https://ksauqt5f5er2djql3atquzas4e0ofpla.lambda-url.ap-northeast-2.on.aws/redirect/github?foo=bar"
 					buttonText="Login with Github"
 				/>
 			</div>
