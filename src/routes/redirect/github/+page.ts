@@ -6,7 +6,6 @@ import { githubSignup } from '../../../lib/api/auth/github-signup';
 import { setCookie } from '../../../lib/utils/cookie';
 
 export const ssr = false;
-export const prerender = true;
 
 export async function load({ url }: LoadEvent) {
 	const code = url.searchParams?.get?.('code');
