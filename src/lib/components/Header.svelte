@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import logo from '$lib/images/svelte-logo.svg';
+	import profilePlaceholder from '$lib/images/profile-placeholder.svg';
 	import login from '$lib/images/login.svg';
 	import type { User } from '../types/User';
 	import { onMount } from 'svelte';
@@ -51,7 +52,13 @@
 
 	<div class="corner">
 		{#if isLogin}
-			<p>login</p>
+			<a href="/my">
+				{#if myInfo?.thumbnail_url}
+					<img class="thumb" src={myInfo.thumbnail_url} alt="GitHub" />
+				{:else}
+					<img class="thumb" src={profilePlaceholder} alt="GitHub" />
+				{/if}
+			</a>
 		{:else}
 			<a href="/login">
 				<img src={login} alt="GitHub" />
@@ -61,6 +68,11 @@
 </header>
 
 <style>
+	.thumb {
+		max-width: 40px;
+		max-height: 40px;
+	}
+
 	header {
 		display: flex;
 		justify-content: space-between;
