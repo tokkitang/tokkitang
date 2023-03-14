@@ -1,9 +1,7 @@
 <script>
 </script>
 
-<div class="global-wrapper">
-	<button on:click={() => alert('test')}>dsds</button>
-</div>
+<div class="global-wrapper" />
 
 <style lang="postcss">
 	:global(html) {
