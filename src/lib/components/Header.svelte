@@ -3,9 +3,26 @@
 	import logo from '$lib/images/svelte-logo.svg';
 	import login from '$lib/images/login.svg';
 	import type { User } from '../types/User';
+	import { onMount } from 'svelte';
+	import { getCookie } from '../utils/cookie';
+	import { getUserInfo } from '../api/user/get-user-info';
 
 	export let isLogin: boolean = false;
 	export let myInfo: User | null = null;
+
+	onMount(async () => {
+		const accessToken = getCookie('access_token');
+
+		if (accessToken) {
+			try {
+				const userInfoResponse = await getUserInfo(accessToken);
+				myInfo = { ...userInfoResponse };
+				isLogin = true;
+			} catch (error) {
+				console.error(error);
+			}
+		}
+	});
 </script>
 
 <header>
