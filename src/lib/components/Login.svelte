@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { login } from '../api/auth/login';
 	import { setCookie } from '../utils/cookie';
+	import { movePage } from '../utils/movePage';
 	import GithubLogin from './GithubLogin.svelte';
 
 	export let email: string | null = null;
@@ -18,9 +19,8 @@
 			const loginResponse = await login(email, password);
 			if (loginResponse.success) {
 				alert('로그인에 성공했습니다.');
-				console.log(loginResponse.access_token);
-
 				setCookie('access_token', loginResponse.access_token);
+				movePage('/');
 			} else {
 				alert('로그인에 실패했습니다.');
 			}
