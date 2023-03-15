@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import logo from '$lib/images/svelte-logo.svg';
+	import logo from '$lib/images/rabbit-logo.svg';
 	import profilePlaceholder from '$lib/images/profile-placeholder.svg';
 	import login from '$lib/images/login.svg';
 	import type { User } from '../types/User';
