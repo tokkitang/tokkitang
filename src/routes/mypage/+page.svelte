@@ -6,6 +6,7 @@
 	import profilePlaceholder from '$lib/images/profile-placeholder.svg';
 	import type { Team } from '../../lib/types/Team';
 	import { getMyTeamList } from '../../lib/api/team/get-my-team-list';
+	import TeamList from '../../lib/components/TeamList.svelte';
 
 	export let isLogin: boolean = false;
 	export let myInfo: User | null = null;
@@ -39,20 +40,7 @@
 		<h2 class="nickname">{myInfo?.nickname}</h2>
 		<p class="email">{myInfo?.email}</p>
 	</div>
-	<div class="teams">
-		<h3>My Team List</h3>
-		<ul>
-			<li class="team">
-				<img
-					class="team-image"
-					src="https://static.tokkitang.com/thumbnail/user/1678887724_thumbnail_asdf.png"
-					alt="/src/lib/images/team-placeholder.svg"
-				/>
-				<p class="team-name">팀2 이름</p>
-			</li>
-			<!-- 추가적인 팀 목록을 넣으려면 위의 <li> 요소를 복사하고 팀 이름과 이미지 URL을 수정하세요. -->
-		</ul>
-	</div>
+	<TeamList {teamList} />
 </div>
 
 <style>
@@ -94,32 +82,5 @@
 		font-size: 16px;
 		color: #777;
 		margin-top: 5px;
-	}
-
-	.teams {
-		margin-bottom: 20px;
-	}
-
-	.teams h3 {
-		font-size: 20px;
-		font-weight: bold;
-		margin-bottom: 10px;
-	}
-
-	.team {
-		display: flex;
-		align-items: center;
-		margin-bottom: 10px;
-	}
-
-	.team-image {
-		width: 100px;
-		height: 100px;
-		object-fit: cover;
-		margin-right: 10px;
-	}
-
-	.team-name {
-		font-size: 16px;
 	}
 </style>

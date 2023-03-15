@@ -26,9 +26,16 @@
 		height: 100px;
 		object-fit: cover;
 		margin-right: 10px;
+		border-radius: 20%;
 	}
 
 	.team-name {
 		font-size: 16px;
+	}
+
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
 	}
 </style>
