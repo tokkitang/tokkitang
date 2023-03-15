@@ -2,8 +2,9 @@ import { redirect, type LoadEvent } from '@sveltejs/kit';
 import { getGithubAccessToken } from '../../../lib/api/auth/get-github-token';
 import { getGithubUser } from '../../../lib/api/auth/get-github-user';
 import { githubLogin } from '../../../lib/api/auth/github-login';
-import { githubSignup } from '../../../lib/api/auth/github-signup';
+import { githubSignup, type GithubSignupResponse } from '../../../lib/api/auth/github-signup';
 import { setCookie } from '../../../lib/utils/cookie';
+import { HTTPError } from 'ky';
 
 export const ssr = false;
 export const csr = true;
@@ -36,19 +37,28 @@ export async function load({ url }: LoadEvent) {
 					githubUserInfo.name != null &&
 					githubUserInfo.id != null
 				) {
-					const githubSignupResponse = await githubSignup(
-						githubUserInfo.name,
-						githubUserInfo.email,
-						githubAccessToken
-					);
-					if (githubSignupResponse.success) {
-						setCookie('access_token', githubSignupResponse.access_token);
-					} else if (githubSignupResponse.email_duplicate) {
-						alert('이미 가입된 이메일입니다.');
-						throw redirect(302, '/');
-					} else {
-						alert('가입 실패');
-						throw redirect(302, '/');
+					try {
+						const githubSignupResponse = await githubSignup(
+							githubUserInfo.name,
+							githubUserInfo.email,
+							githubAccessToken
+						);
+						if (githubSignupResponse.success) {
+							setCookie('access_token', githubSignupResponse.access_token);
+						} else {
+							alert('가입 실패');
+							throw redirect(302, '/');
+						}
+					} catch (error: any) {
+						if (error instanceof HTTPError) {
+							const githubSignupFailResponse: GithubSignupResponse = await error.response.json();
+
+							if (githubSignupFailResponse.email_duplicate) {
+								alert('이미 이메일로 가입된 계정입니다.');
+								throw redirect(302, '/');
+							}
+						}
+						console.error(error);
 					}
 				} else {
 					let query = `?github=true`;
