@@ -1,8 +1,10 @@
 <script lang="ts">
+	import { redirect } from '@sveltejs/kit';
 	import { signup } from '../api/auth/signup';
 	import { uploadUserThumbnail } from '../api/auth/upload';
 	import { checkUserEmailDuplicate } from '../api/user/check-user-email-duplicate';
 	import { setCookie } from '../utils/cookie';
+	import { movePage } from '../utils/movePage';
 	import GithubLogin from './GithubLogin.svelte';
 
 	export let nickname: string | null = null;
@@ -37,6 +39,7 @@
 				console.log(signupResponse.access_token);
 
 				setCookie('access_token', signupResponse.access_token);
+				movePage('/my');
 			} else if (signupResponse.email_duplicate) {
 				alert('이미 존재하는 계정입니다.');
 			} else {
@@ -100,11 +103,6 @@
 			<div class="image-div form-control">
 				<label for="image">Profile Thumbnail</label>
 				<input id="image" type="file" bind:files />
-				<!-- {#if files?.[0]}
-					<p>
-						{files[0].name}
-					</p>
-				{/if} -->
 			</div>
 
 			<button on:click={doSignup}>Sign up</button> <br />
