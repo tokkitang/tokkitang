@@ -7,6 +7,7 @@
 	import { onMount } from 'svelte';
 	import { getCookie } from '../utils/cookie';
 	import { getUserInfo } from '../api/user/get-user-info';
+	import { movePage } from '../utils/movePage';
 
 	export let isLogin: boolean = false;
 	export let myInfo: User | null = null;
@@ -21,6 +22,15 @@
 				isLogin = true;
 			} catch (error) {
 				console.error(error);
+			}
+		} else {
+			const path = window.location.pathname;
+			if (['/mypage'].includes(path)) {
+				movePage('/login');
+			} else if (path.startsWith('/team')) {
+				movePage('/login');
+			} else if (path.startsWith('/project')) {
+				movePage('/login');
 			}
 		}
 	});
