@@ -52,7 +52,7 @@
 
 	<div class="corner">
 		{#if isLogin}
-			<a href="/my">
+			<a href="/mypage">
 				{#if myInfo?.thumbnail_url}
 					<img class="thumb" src={myInfo.thumbnail_url} alt="GitHub" />
 				{:else}

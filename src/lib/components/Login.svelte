@@ -20,7 +20,7 @@
 			if (loginResponse.success) {
 				alert('로그인에 성공했습니다.');
 				setCookie('access_token', loginResponse.access_token);
-				movePage('/');
+				movePage('/mypage');
 			} else {
 				alert('로그인에 실패했습니다.');
 			}

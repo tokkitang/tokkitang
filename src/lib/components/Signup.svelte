@@ -39,7 +39,7 @@
 				console.log(signupResponse.access_token);
 
 				setCookie('access_token', signupResponse.access_token);
-				movePage('/my');
+				movePage('/mypage');
 			} else if (signupResponse.email_duplicate) {
 				alert('이미 존재하는 계정입니다.');
 			} else {
