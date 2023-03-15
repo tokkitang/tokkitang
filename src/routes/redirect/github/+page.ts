@@ -29,6 +29,8 @@ export async function load({ url }: LoadEvent) {
 		const githubLoginResponse = await githubLogin(githubAccessToken);
 		if (githubLoginResponse.success) {
 			setCookie('access_token', githubLoginResponse.access_token);
+
+			throw redirect(302, '/');
 		} else {
 			if (githubLoginResponse.need_signup) {
 				const githubUserInfo = await getGithubUser(githubAccessToken);
@@ -45,6 +47,7 @@ export async function load({ url }: LoadEvent) {
 						);
 						if (githubSignupResponse.success) {
 							setCookie('access_token', githubSignupResponse.access_token);
+							throw redirect(302, '/');
 						} else {
 							alert('가입 실패');
 							throw redirect(302, '/');
@@ -58,7 +61,9 @@ export async function load({ url }: LoadEvent) {
 								throw redirect(302, '/');
 							}
 						}
+
 						console.error(error);
+						throw redirect(302, '/');
 					}
 				} else {
 					let query = `?github=true`;
