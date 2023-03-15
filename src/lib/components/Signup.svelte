@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { redirect } from '@sveltejs/kit';
 	import { signup } from '../api/auth/signup';
 	import { uploadUserThumbnail } from '../api/auth/upload';
 	import { checkUserEmailDuplicate } from '../api/user/check-user-email-duplicate';
