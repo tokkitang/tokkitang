@@ -20,7 +20,7 @@
 			if (loginResponse.success) {
 				alert('로그인에 성공했습니다.');
 				setCookie('access_token', loginResponse.access_token);
-				movePage('/');
+				movePage('/mypage');
 			} else {
 				alert('로그인에 실패했습니다.');
 			}
@@ -52,7 +52,8 @@
 			<h1>Login with SSO</h1>
 			<div class="github">
 				<GithubLogin
-					href="https://github.com/login/oauth/authorize?client_id=09c53661153af8c5b13c&redirect_uri=https://ksauqt5f5er2djql3atquzas4e0ofpla.lambda-url.ap-northeast-2.on.aws/redirect/github"
+					href="https://github.com/login/oauth/authorize?client_id=09c53661153af8c5b13c&redirect_uri=https://ksauqt5f5er2djql3atquzas4e0ofpla.lambda-url.ap-northeast-2.on.aws/redirect/github?redirect_url={window
+						.location.origin}/redirect/github"
 					buttonText="Login with Github"
 				/>
 			</div>

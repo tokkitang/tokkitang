@@ -7,7 +7,4 @@
 </div>
 
 <style>
-	:global(html) {
-		background-color: #e0eee0;
-	}
 </style>

@@ -1,4 +1,4 @@
-import { mainApi } from '../setting';
+import { thirdpartApi } from '../setting';
 
 export type GithubUserResponse = {
 	id: number;
@@ -7,7 +7,7 @@ export type GithubUserResponse = {
 };
 
 export async function getGithubUser(access_token: string): Promise<GithubUserResponse> {
-	const response = await mainApi.get('https://api.github.com/user', {
+	const response = await thirdpartApi.get('https://api.github.com/user', {
 		headers: { Authorization: `Bearer ${access_token}`, 'User-Agent': 'tokkitang' }
 	});
 
