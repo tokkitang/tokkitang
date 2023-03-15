@@ -22,7 +22,7 @@
 	.teams h3 {
 		font-size: 20px;
 		font-weight: bold;
-		margin-bottom: 10px;
+		margin-bottom: 20px;
 	}
 
 	* {
