@@ -1,4 +1,4 @@
-import { redirect, type LoadEvent } from '@sveltejs/kit';
+import type { LoadEvent } from '@sveltejs/kit';
 import { getGithubAccessToken } from '../../../lib/api/auth/get-github-token';
 import { getGithubUser } from '../../../lib/api/auth/get-github-user';
 import { githubLogin } from '../../../lib/api/auth/github-login';
