@@ -6,6 +6,7 @@ import { githubSignup } from '../../../lib/api/auth/github-signup';
 import { setCookie } from '../../../lib/utils/cookie';
 
 export const ssr = false;
+export const csr = true;
 
 export async function load({ url }: LoadEvent) {
 	const code = url.searchParams?.get?.('code');
@@ -24,9 +25,7 @@ export async function load({ url }: LoadEvent) {
 	try {
 		const githubTokenResponse = await getGithubAccessToken(code);
 		const githubAccessToken = githubTokenResponse.access_token;
-
 		const githubLoginResponse = await githubLogin(githubAccessToken);
-
 		if (githubLoginResponse.success) {
 			setCookie('access_token', githubLoginResponse.access_token);
 		} else {
@@ -42,7 +41,6 @@ export async function load({ url }: LoadEvent) {
 						githubUserInfo.email,
 						githubAccessToken
 					);
-
 					if (githubSignupResponse.success) {
 						setCookie('access_token', githubSignupResponse.access_token);
 					} else if (githubSignupResponse.email_duplicate) {
@@ -54,14 +52,12 @@ export async function load({ url }: LoadEvent) {
 					}
 				} else {
 					let query = `?github=true`;
-
 					if (githubUserInfo.email != null) {
 						query += `&email=${githubUserInfo.email}`;
 					}
 					if (githubUserInfo.name != null) {
 						query += `&nickname=${githubUserInfo.name}`;
 					}
-
 					throw redirect(302, `/signup${query}`);
 				}
 			} else {
