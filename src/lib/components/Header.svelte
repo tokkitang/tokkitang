@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import logo from '$lib/images/svelte-logo.svg';
+	import logo from '$lib/images/rabbit-logo.svg';
 	import profilePlaceholder from '$lib/images/profile-placeholder.svg';
 	import login from '$lib/images/login.svg';
 	import type { User } from '../types/User';
 	import { onMount } from 'svelte';
 	import { getCookie } from '../utils/cookie';
 	import { getUserInfo } from '../api/user/get-user-info';
+	import { movePage } from '../utils/movePage';
 
 	export let isLogin: boolean = false;
 	export let myInfo: User | null = null;
@@ -21,6 +22,15 @@
 				isLogin = true;
 			} catch (error) {
 				console.error(error);
+			}
+		} else {
+			const path = window.location.pathname;
+			if (['/mypage'].includes(path)) {
+				movePage('/login');
+			} else if (path.startsWith('/team')) {
+				movePage('/login');
+			} else if (path.startsWith('/project')) {
+				movePage('/login');
 			}
 		}
 	});

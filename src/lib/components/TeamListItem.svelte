@@ -6,12 +6,14 @@
 </script>
 
 <li class="team">
-	{#if team.thumbnail_url}
-		<img class="team-image" src={team.thumbnail_url} alt="" />
-	{:else}
-		<img class="team-image" src={teamPlaceholder} alt="" />
-	{/if}
-	<p class="team-name">{team.name}</p>
+	<a class="team" href="/team/{team.id}">
+		{#if team.thumbnail_url}
+			<img class="team-image" src={team.thumbnail_url} alt="" />
+		{:else}
+			<img class="team-image" src={teamPlaceholder} alt="" />
+		{/if}
+		<p class="team-name">{team.name}</p></a
+	>
 </li>
 
 <style>
