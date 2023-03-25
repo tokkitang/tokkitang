@@ -5,7 +5,7 @@ import { githubLogin } from '../../../lib/api/auth/github-login';
 import { githubSignup, type GithubSignupResponse } from '../../../lib/api/auth/github-signup';
 import { setCookie } from '../../../lib/utils/cookie';
 import { HTTPError } from 'ky';
-import { movePage } from '../../../../../../../../../Users/sssan/Code/Svelte/tokkitang/src/lib/utils/movePage';
+import { movePage } from './../../../lib/utils/movePage';
 
 export const ssr = false;
 export const csr = true;
