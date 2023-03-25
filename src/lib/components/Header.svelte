@@ -8,6 +8,8 @@
 	import { getCookie } from '../utils/cookie';
 	import { getUserInfo } from '../api/user/get-user-info';
 	import { movePage } from '../utils/movePage';
+	import { isLoading } from '../../lib/store';
+	import Loading from './Loading.svelte';
 
 	export let isLogin: boolean = false;
 	export let myInfo: User | null = null;
@@ -33,10 +35,16 @@
 				movePage('/login');
 			}
 		}
+
+		isLoading.set(false);
 	});
 </script>
 
 <header>
+	{#if $isLoading}
+		<Loading />
+	{/if}
+
 	<div class="corner">
 		<a href="/">
 			<img src={logo} alt="SvelteKit" />
