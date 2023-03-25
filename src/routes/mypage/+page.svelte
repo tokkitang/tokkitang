@@ -37,8 +37,8 @@
 		{:else}
 			<img class="profile-image" src={profilePlaceholder} alt="" />{/if}
 
-		<h2 class="nickname">{myInfo?.nickname}</h2>
-		<p class="email">{myInfo?.email}</p>
+		<h2 class="nickname">{myInfo?.nickname ?? ''}</h2>
+		<p class="email">{myInfo?.email ?? ''}</p>
 	</div>
 	<TeamList {teamList} />
 </div>

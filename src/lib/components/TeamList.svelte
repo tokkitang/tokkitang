@@ -8,6 +8,9 @@
 <div class="teams">
 	<h3>My Team List</h3>
 	<ul>
+		{#if teamList.length === 0}
+			<li>No teams found</li>
+		{/if}
 		{#each teamList as team}
 			<TeamListItem {team} />
 		{/each}
