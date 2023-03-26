@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { movePage } from '../utils/movePage';
+
 	export async function onClicked() {
 		try {
+			movePage('/team/new');
 		} catch (error) {
 			console.error(error);
 		}
@@ -8,7 +11,7 @@
 </script>
 
 <div class="teams">
-	<button>new Team</button>
+	<button on:click={onClicked}>new Team</button>
 </div>
 
 <style>

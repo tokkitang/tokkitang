@@ -12,3 +12,19 @@ export async function uploadUserThumbnail(formData: FormData): Promise<UploadIma
 
 	return await response.json();
 }
+
+export async function uploadTeamThumbnail(formData: FormData): Promise<UploadImageResponse> {
+	const response = await mainApi.post('utils/image/upload/team-thumbnail', {
+		body: formData
+	});
+
+	return await response.json();
+}
+
+export async function uploadProjectThumbnail(formData: FormData): Promise<UploadImageResponse> {
+	const response = await mainApi.post('utils/image/upload/project-thumbnail', {
+		body: formData
+	});
+
+	return await response.json();
+}
