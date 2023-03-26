@@ -36,7 +36,7 @@
 			}
 		}
 
-		isLoading.set(false);
+		$isLoading = false;
 	});
 </script>
 
