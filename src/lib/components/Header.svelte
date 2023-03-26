@@ -3,31 +3,18 @@
 	import logo from '$lib/images/rabbit-logo.svg';
 	import profilePlaceholder from '$lib/images/profile-placeholder.svg';
 	import login from '$lib/images/login.svg';
-	import type { User } from '../types/User';
 	import { onMount } from 'svelte';
-	import { getCookie } from '../utils/cookie';
-	import { getUserInfo } from '../api/user/get-user-info';
 	import { movePage } from '../utils/movePage';
-	import { accessToken, isLoading } from '../../lib/store';
-	import Loading from './Loading.svelte';
+	import type { User } from '../types/User';
 
-	export let isLogin: boolean = false;
-	export let myInfo: User | null = null;
+	export let accessToken: string | null = $page.data.accessToken;
+	export let isLogin: boolean = $page.data.isLogin;
+	export let myUserInfo: User | null = $page.data.myUserInfo;
 
 	onMount(async () => {
-		const token = getCookie('access_token');
+		console.log($page.data);
 
-		$accessToken = token;
-
-		if (token) {
-			try {
-				const userInfoResponse = await getUserInfo(accessToken);
-				myInfo = { ...userInfoResponse };
-				isLogin = true;
-			} catch (error) {
-				console.error(error);
-			}
-		} else {
+		if (accessToken === null) {
 			const path = window.location.pathname;
 			if (['/mypage'].includes(path)) {
 				movePage('/login');
@@ -37,16 +24,10 @@
 				movePage('/login');
 			}
 		}
-
-		$isLoading = false;
 	});
 </script>
 
-<header>
-	{#if $isLoading}
-		<Loading />
-	{/if}
-
+<header data-hydrate>
 	<div class="corner">
 		<a href="/">
 			<img src={logo} alt="SvelteKit" />
@@ -73,8 +54,8 @@
 	<div class="corner">
 		{#if isLogin}
 			<a href="/mypage">
-				{#if myInfo?.thumbnail_url}
-					<img class="thumb" src={myInfo.thumbnail_url} alt="GitHub" />
+				{#if myUserInfo?.thumbnail_url}
+					<img class="thumb" src={myUserInfo.thumbnail_url} alt="GitHub" />
 				{:else}
 					<img class="thumb" src={profilePlaceholder} alt="GitHub" />
 				{/if}

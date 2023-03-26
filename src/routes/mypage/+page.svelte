@@ -8,27 +8,13 @@
 	import { getMyTeamList } from '../../lib/api/team/get-my-team-list';
 	import TeamList from '../../lib/components/TeamList.svelte';
 	import CreateTeamButton from '../../lib/components/CreateTeamButton.svelte';
+	import { page } from '$app/stores';
 
-	export let isLogin: boolean = false;
-	export let myInfo: User | null = null;
-	export let teamList: Team[] = [];
+	export let isLogin: boolean = $page.data.isLogin;
+	export let myInfo: User | null = $page.data.myUserInfo;
+	export let teamList: Team[] = $page.data.teamList;
 
-	onMount(async () => {
-		const accessToken = getCookie('access_token');
-
-		if (accessToken) {
-			try {
-				const userInfoResponse = await getUserInfo(accessToken);
-				myInfo = { ...userInfoResponse };
-				isLogin = true;
-
-				const teamListResponse = await getMyTeamList(accessToken);
-				teamList = teamListResponse.list;
-			} catch (error) {
-				console.error(error);
-			}
-		}
-	});
+	onMount(async () => {});
 </script>
 
 <div class="container">
