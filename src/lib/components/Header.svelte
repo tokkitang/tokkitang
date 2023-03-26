@@ -12,8 +12,6 @@
 	export const myUserInfo: User | null = $page.data.myUserInfo;
 
 	onMount(async () => {
-		console.log($page.data);
-
 		if (accessToken === null) {
 			const path = window.location.pathname;
 			if (['/mypage'].includes(path)) {
