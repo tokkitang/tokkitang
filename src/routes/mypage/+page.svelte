@@ -7,6 +7,7 @@
 	import type { Team } from '../../lib/types/Team';
 	import { getMyTeamList } from '../../lib/api/team/get-my-team-list';
 	import TeamList from '../../lib/components/TeamList.svelte';
+	import CreateTeamButton from '../../lib/components/CreateTeamButton.svelte';
 
 	export let isLogin: boolean = false;
 	export let myInfo: User | null = null;
@@ -39,6 +40,10 @@
 
 		<h2 class="nickname">{myInfo?.nickname ?? ''}</h2>
 		<p class="email">{myInfo?.email ?? ''}</p>
+	</div>
+
+	<div class="left-button">
+		<CreateTeamButton />
 	</div>
 	<TeamList {teamList} />
 </div>
@@ -82,5 +87,10 @@
 		font-size: 16px;
 		color: #777;
 		margin-top: 5px;
+	}
+
+	.left-button {
+		width: 20%;
+		float: right;
 	}
 </style>

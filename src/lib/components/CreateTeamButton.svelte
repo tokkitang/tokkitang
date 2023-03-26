@@ -1,21 +1,8 @@
 <script lang="ts">
-	import { mainApi } from '../api/setting';
-	import type { Team } from '../types/Team';
-
 	export async function onClicked() {
-		const response = await mainApi('/api/team', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				name: 'New Team'
-			})
-		});
-
-		if (response.ok) {
-			const team: Team = await response.json();
-			window.location.href = `/team/${team.id}`;
+		try {
+		} catch (error) {
+			console.error(error);
 		}
 	}
 </script>
@@ -25,4 +12,16 @@
 </div>
 
 <style>
+	button {
+		display: block;
+		width: 100%;
+		padding: 10px;
+		border: none;
+		border-radius: 5px;
+		background-color: #333;
+		color: #fff;
+		font-size: 16px;
+		cursor: pointer;
+		transition: background-color 0.2s ease-in-out;
+	}
 </style>
