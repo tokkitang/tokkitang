@@ -10,9 +10,9 @@
 	import CreateTeamButton from '../../lib/components/CreateTeamButton.svelte';
 	import { page } from '$app/stores';
 
-	export let isLogin: boolean = $page.data.isLogin;
-	export let myInfo: User | null = $page.data.myUserInfo;
-	export let teamList: Team[] = $page.data.teamList;
+	export const isLogin: boolean = $page.data.isLogin;
+	export const myInfo: User | null = $page.data.myUserInfo;
+	export const teamList: Team[] = $page.data.teamList;
 
 	onMount(async () => {});
 </script>
