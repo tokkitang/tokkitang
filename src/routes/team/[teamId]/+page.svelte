@@ -6,22 +6,33 @@
 	import { getUserInfo } from '../../../lib/api/user/get-user-info';
 	import teamPlaceholder from '$lib/images/team-placeholder.svg';
 	import type { Team } from '../../../lib/types/Team';
+	import { isLoading } from '../../../lib/store';
+	import { getTeamInfo } from '../../../lib/api/team/get-team-info';
 
-	export let myInfo: User | null = null;
 	export const teamId = $page.params.teamId;
 	export let team: Team | null = null;
+
+	$isLoading = true;
 
 	onMount(async () => {
 		const accessToken = getCookie('access_token');
 
 		if (accessToken) {
 			try {
-				const userInfoResponse = await getUserInfo(accessToken);
-				myInfo = { ...userInfoResponse };
+				const teamInfoResponse = await getTeamInfo(accessToken, teamId);
+				const teamData = teamInfoResponse.data;
+				team = {
+					name: teamData.name,
+					description: teamData.description,
+					thumbnail_url: teamData.thumbnail_url,
+					id: teamData.id
+				};
 			} catch (error) {
 				console.error(error);
 			}
 		}
+
+		$isLoading = false;
 	});
 </script>
 
@@ -32,8 +43,8 @@
 		{:else}
 			<img class="profile-image" src={teamPlaceholder} alt="" />{/if}
 
-		<h2 class="nickname">{team?.name}</h2>
-		<p class="email">{team?.description}</p>
+		<h2 class="nickname">{team?.name ?? ''}</h2>
+		<p class="email">{team?.description ?? ''}</p>
 	</div>
 </div>
 
