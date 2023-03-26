@@ -7,13 +7,11 @@
 	import { movePage } from '../utils/movePage';
 	import type { User } from '../types/User';
 
-	export let accessToken: string | null = $page.data.accessToken;
-	export let isLogin: boolean = $page.data.isLogin;
-	export let myUserInfo: User | null = $page.data.myUserInfo;
+	export const accessToken: string | null = $page.data.accessToken;
+	export const isLogin: boolean = $page.data.isLogin;
+	export const myUserInfo: User | null = $page.data.myUserInfo;
 
 	onMount(async () => {
-		console.log($page.data);
-
 		if (accessToken === null) {
 			const path = window.location.pathname;
 			if (['/mypage'].includes(path)) {
