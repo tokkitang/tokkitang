@@ -8,16 +8,18 @@
 	import { getCookie } from '../utils/cookie';
 	import { getUserInfo } from '../api/user/get-user-info';
 	import { movePage } from '../utils/movePage';
-	import { isLoading } from '../../lib/store';
+	import { accessToken, isLoading } from '../../lib/store';
 	import Loading from './Loading.svelte';
 
 	export let isLogin: boolean = false;
 	export let myInfo: User | null = null;
 
 	onMount(async () => {
-		const accessToken = getCookie('access_token');
+		const token = getCookie('access_token');
 
-		if (accessToken) {
+		$accessToken = token;
+
+		if (token) {
 			try {
 				const userInfoResponse = await getUserInfo(accessToken);
 				myInfo = { ...userInfoResponse };
