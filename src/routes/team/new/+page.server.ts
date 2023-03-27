@@ -14,8 +14,9 @@ export async function load(page: RequestEvent) {
 			myUserInfo = { ...userInfoResponse };
 			isLogin = true;
 			error = error;
-		} catch (error) {
-			console.error(error);
+		} catch (e) {
+			error = String(e);
+			console.error(e);
 		}
 	}
 
