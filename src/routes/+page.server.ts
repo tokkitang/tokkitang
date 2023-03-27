@@ -13,9 +13,9 @@ export async function load(page: RequestEvent) {
 			const userInfoResponse = await getUserInfoWithFetch(page.fetch, accessToken);
 			myUserInfo = { ...userInfoResponse };
 			isLogin = true;
-		} catch (error) {
-			error = error;
-			console.error(error);
+		} catch (e) {
+			error = String(e);
+			console.error(e);
 		}
 	}
 
