@@ -2,7 +2,9 @@ import type { RequestEvent } from '@sveltejs/kit';
 import type { User } from '../../../lib/types/User';
 import { getUserInfoWithFetch } from '../../../lib/api/user/get-user-info';
 import { getTeamInfoWithFetch } from '../../../lib/api/team/get-team-info';
+import { getProjectListByTeamIdWithFetch } from '../../../lib/api/project/get-project-list';
 import type { Team } from '../../../lib/types/Team';
+import type { Project } from '../../../lib/types/Project';
 
 export async function load(page: RequestEvent) {
 	const teamId: string = page.params.teamId!!;
@@ -11,6 +13,7 @@ export async function load(page: RequestEvent) {
 	let myUserInfo: User | null = null;
 	let isLogin = false;
 	let team: Team | null = null;
+	let projectList: Project[] = [];
 	let error: any = null;
 
 	if (accessToken) {
@@ -26,6 +29,13 @@ export async function load(page: RequestEvent) {
 				description: teamInfoResponse.data.description,
 				thumbnail_url: teamInfoResponse.data.thumbnail_url
 			};
+
+			const projectListResponse = await getProjectListByTeamIdWithFetch(
+				page.fetch,
+				accessToken,
+				teamId
+			);
+			projectList = projectListResponse.list;
 		} catch (error) {
 			error = error;
 			console.error(error);
@@ -37,6 +47,7 @@ export async function load(page: RequestEvent) {
 		myUserInfo,
 		isLogin,
 		team,
+		projectList,
 		error
 	};
 }
