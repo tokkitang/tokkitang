@@ -1,17 +1,19 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import type { User } from '../../../lib/types/User';
-import { getUserInfo } from '../../../lib/api/user/get-user-info';
+import { getUserInfoWithFetch } from '../../../lib/api/user/get-user-info';
 
 export async function load(page: RequestEvent) {
 	const accessToken = page.cookies.get('access_token');
 	let myUserInfo: User | null = null;
 	let isLogin = false;
+	let error: any = null;
 
 	if (accessToken) {
 		try {
-			const userInfoResponse = await getUserInfo(accessToken);
+			const userInfoResponse = await getUserInfoWithFetch(page.fetch, accessToken);
 			myUserInfo = { ...userInfoResponse };
 			isLogin = true;
+			error = error;
 		} catch (error) {
 			console.error(error);
 		}
@@ -20,6 +22,7 @@ export async function load(page: RequestEvent) {
 	return {
 		accessToken,
 		myUserInfo,
-		isLogin
+		isLogin,
+		error
 	};
 }

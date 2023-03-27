@@ -13,15 +13,16 @@ export async function load(page: RequestEvent) {
 
 	if (accessToken) {
 		try {
+			// using ky...
 			const userInfoResponse = await getUserInfo(accessToken);
 			myUserInfo = { ...userInfoResponse };
 			isLogin = true;
 
 			const teamListResponse = await getMyTeamList(accessToken);
 			teamList = teamListResponse.list;
-		} catch (error) {
-			error = error;
-			console.error(error);
+		} catch (e) {
+			error = e;
+			console.error(e);
 		}
 	}
 
