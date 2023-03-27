@@ -9,6 +9,7 @@ export async function load(page: RequestEvent) {
 	let myUserInfo: User | null = null;
 	let isLogin = false;
 	let teamList: Team[] = [];
+	let error: any = null;
 
 	if (accessToken) {
 		try {
@@ -19,6 +20,7 @@ export async function load(page: RequestEvent) {
 			const teamListResponse = await getMyTeamList(accessToken);
 			teamList = teamListResponse.list;
 		} catch (error) {
+			error = error;
 			console.error(error);
 		}
 	}
@@ -27,6 +29,7 @@ export async function load(page: RequestEvent) {
 		accessToken,
 		myUserInfo,
 		isLogin,
+		error,
 		teamList
 	};
 }
