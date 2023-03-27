@@ -13,18 +13,11 @@ export async function load(page: RequestEvent) {
 
 	if (accessToken) {
 		try {
-			// const userInfoResponse = await getUserInfoWithFetch(page.fetch, accessToken);
-			// myUserInfo = { ...userInfoResponse };
-			// isLogin = true;
-
-			// const teamListResponse = await getMyTeamListWithFetch(page.fetch, accessToken);
-			// teamList = teamListResponse.list;
-
-			const userInfoResponse = await getUserInfo(accessToken);
+			const userInfoResponse = await getUserInfoWithFetch(page.fetch, accessToken);
 			myUserInfo = { ...userInfoResponse };
 			isLogin = true;
 
-			const teamListResponse = await getMyTeamList(accessToken);
+			const teamListResponse = await getMyTeamListWithFetch(page.fetch, accessToken);
 			teamList = teamListResponse.list;
 		} catch (e) {
 			error = String(e);
