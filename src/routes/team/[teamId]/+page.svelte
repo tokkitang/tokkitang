@@ -3,9 +3,12 @@
 	import { page } from '$app/stores';
 	import teamPlaceholder from '$lib/images/team-placeholder.svg';
 	import type { Team } from '../../../lib/types/Team';
+	import ProjectList from '../../../lib/components/ProjectList.svelte';
+	import type { Project } from '../../../lib/types/Project';
 
 	export const teamId: string = $page.params.teamId;
 	export const team: Team = $page.data.team;
+	export const projectList: Project[] = $page.data.projectList;
 
 	onMount(async () => {});
 </script>
@@ -20,6 +23,10 @@
 		<h2 class="nickname">{team?.name ?? ''}</h2>
 		<p class="email">{team?.description ?? ''}</p>
 	</div>
+
+	<div class="left-button" />
+
+	<ProjectList {projectList} />
 </div>
 
 <style>
