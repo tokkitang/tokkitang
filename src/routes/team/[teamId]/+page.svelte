@@ -5,6 +5,7 @@
 	import type { Team } from '../../../lib/types/Team';
 	import ProjectList from '../../../lib/components/ProjectList.svelte';
 	import type { Project } from '../../../lib/types/Project';
+	import CreateProjectButton from '../../../lib/components/CreateProjectButton.svelte';
 
 	export const teamId: string = $page.params.teamId;
 	export const team: Team = $page.data.team;
@@ -24,7 +25,9 @@
 		<p class="email">{team?.description ?? ''}</p>
 	</div>
 
-	<div class="left-button" />
+	<div class="left-button">
+		<CreateProjectButton teamId={team.id} />
+	</div>
 
 	<ProjectList {projectList} />
 </div>
@@ -68,5 +71,10 @@
 		font-size: 16px;
 		color: #777;
 		margin-top: 5px;
+	}
+
+	.left-button {
+		width: 20%;
+		float: right;
 	}
 </style>
