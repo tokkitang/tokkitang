@@ -6,6 +6,7 @@ export async function load(page: RequestEvent) {
 	const accessToken = page.cookies.get('access_token');
 	let myUserInfo: User | null = null;
 	let isLogin = false;
+	let error: any = null;
 
 	if (accessToken) {
 		try {
@@ -13,6 +14,7 @@ export async function load(page: RequestEvent) {
 			myUserInfo = { ...userInfoResponse };
 			isLogin = true;
 		} catch (error) {
+			error = error;
 			console.error(error);
 		}
 	}
@@ -20,6 +22,7 @@ export async function load(page: RequestEvent) {
 	return {
 		accessToken,
 		myUserInfo,
-		isLogin
+		isLogin,
+		error
 	};
 }
