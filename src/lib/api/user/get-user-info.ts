@@ -1,4 +1,4 @@
-import { mainApi } from '../setting';
+import { mainApi, mainServerUrl } from '../setting';
 
 export type UserInfoResponse = {
 	nickname: string;
@@ -9,6 +9,19 @@ export type UserInfoResponse = {
 
 export async function getUserInfo(access_token: string): Promise<UserInfoResponse> {
 	const response = await mainApi.get('user/my/info', {
+		headers: {
+			Authorization: `Bearer ${access_token}`
+		}
+	});
+
+	return await response.json();
+}
+
+export async function getUserInfoWithFetch(
+	fetchObj: typeof fetch,
+	access_token: string
+): Promise<UserInfoResponse> {
+	const response = await fetchObj(`${mainServerUrl}/user/my/info`, {
 		headers: {
 			Authorization: `Bearer ${access_token}`
 		}
