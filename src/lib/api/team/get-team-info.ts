@@ -1,5 +1,5 @@
 import type { Authority } from '../../types/Authority';
-import { mainApi } from '../setting';
+import { mainApi, mainServerUrl } from '../setting';
 
 export type GetTeamInfoItem = {
 	id: string;
@@ -21,6 +21,22 @@ export async function getTeamInfo(
 		headers: {
 			Authorization: `Bearer ${access_token}`
 		}
+	});
+
+	return await response.json();
+}
+
+export async function getTeamInfoWithFetch(
+	fetchObj: typeof fetch,
+	access_token: string,
+	teamId: string
+): Promise<GetTeamInfoResponse> {
+	const response = await fetchObj(`${mainServerUrl}/team/${teamId}`, {
+		headers: {
+			Authorization: `Bearer ${access_token}`,
+			'Content-Type': 'application/json'
+		},
+		method: 'GET'
 	});
 
 	return await response.json();
