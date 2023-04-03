@@ -1,6 +1,15 @@
 <script lang="ts">
-	import { movePage } from '../../../lib/utils/movePage';
 	import { isLoading } from '../../../lib/store';
+	import DiagramCanvas from '$lib/components/DiagramCanvas.svelte';
+	import type { Entity } from '$lib/types/Entity';
+	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
+	import type { Note } from '$lib/types/Note';
+
+	export let entityList: Entity[] = $page.data.entityList;
+	export let noteList: Note[] = $page.data.noteList;
+
+	onMount(() => {});
 
 	export async function create() {
 		try {
@@ -10,7 +19,9 @@
 	}
 </script>
 
-<main class="container" />
+<main class="container">
+	<DiagramCanvas width={null} height={null} {entityList} {noteList} />
+</main>
 
 <style>
 </style>
