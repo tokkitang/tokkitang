@@ -3,6 +3,8 @@ import type { User } from '../../../lib/types/User';
 import { getUserInfoWithFetch } from '../../../lib/api/user/get-user-info';
 import type { Entity } from '$lib/types/Entity';
 import { getEntityListByProjectIdWithFetch } from '$lib/api/entity/get-project-list';
+import type { Note } from '$lib/types/Note';
+import { getNoteListByProjectIdWithFetch } from '$lib/api/note/get-note-list';
 
 export async function load(page: RequestEvent) {
 	const projectId = page.params.projectId;
@@ -12,6 +14,7 @@ export async function load(page: RequestEvent) {
 	let isLogin = false;
 	let error: any = null;
 	let entityList: Entity[] = [];
+	let noteList: Note[] = [];
 
 	if (accessToken && projectId) {
 		try {
@@ -21,6 +24,9 @@ export async function load(page: RequestEvent) {
 
 			const entityListResponse = await getEntityListByProjectIdWithFetch(page.fetch, accessToken, projectId);
 			entityList = entityListResponse.list;
+
+			const noteListResponse = await getNoteListByProjectIdWithFetch(page.fetch, accessToken, projectId);
+			noteList = noteListResponse.list;
 		} catch (e) {
 			error = String(e);
 			console.error(e);
@@ -31,6 +37,7 @@ export async function load(page: RequestEvent) {
 		accessToken,
 		myUserInfo,
 		isLogin,
-		error, entityList
+		error,
+		entityList, noteList
 	};
 }

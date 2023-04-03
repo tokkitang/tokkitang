@@ -3,8 +3,10 @@
 	import Konva from 'konva';
 	import { makeInputText } from '../utils/konva/makeInputText';
 	import type { Entity } from '$lib/types/Entity';
+	import type { Note } from '$lib/types/Note';
 
 	export let entityList: Entity[];
+	export let noteList: Note[];
 	export let width: number | null;
 	export let height: number | null;
 

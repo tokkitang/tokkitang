@@ -4,8 +4,10 @@
 	import type { Entity } from '$lib/types/Entity';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import type { Note } from '$lib/types/Note';
 
 	export let entityList: Entity[] = $page.data.entityList;
+	export let noteList: Note[] = $page.data.noteList;
 
 	onMount(() => {});
 
@@ -18,7 +20,7 @@
 </script>
 
 <main class="container">
-	<DiagramCanvas width={null} height={null} {entityList} />
+	<DiagramCanvas width={null} height={null} {entityList} {noteList} />
 </main>
 
 <style>
