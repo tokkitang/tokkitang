@@ -2,6 +2,11 @@
 	import { onMount } from 'svelte';
 	import Konva from 'konva';
 	import { makeInputText } from '../utils/konva/makeInputText';
+	import type { Entity } from '$lib/types/Entity';
+
+	export let entityList: Entity[];
+	export let width: number | null;
+	export let height: number | null;
 
 	let stage: Konva.Stage;
 	let layer: Konva.Layer;
@@ -26,8 +31,8 @@
 	onMount(() => {
 		stage = new Konva.Stage({
 			container: 'canvas',
-			width: window.innerWidth,
-			height: window.innerHeight
+			width: width ?? window.innerWidth,
+			height: height ?? window.innerHeight
 		});
 
 		// add canvas element
@@ -111,6 +116,7 @@
 		// entityMap.set(entityId, newEntity);
 	}
 
+	// 엔티티에 행 추가
 	export function addRowToEntity(entityGroup: Konva.Group) {
 		const rowCount = entityGroup.getChildren().length;
 
@@ -150,10 +156,45 @@
 	}
 </script>
 
-<main>
-	<button on:click={createEntity}>Create Entity</button>
-	<div id="canvas" />
+<main class="split">
+	<div class="left">
+		<button on:click={createEntity} class="left-button">Create Entity</button>
+		<button on:click={createEntity} class="left-button">Create Note</button>
+	</div>
+	<div class="right">
+		<div id="canvas" />
+	</div>
 </main>
 
 <style>
+	.split {
+		display: flex;
+		flex-direction: row;
+		overflow: auto;
+	}
+
+	.left {
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.right {
+		flex-grow: 1;
+	}
+
+	.left-button {
+		display: grey;
+		width: 80px;
+		height: 70px;
+		padding: 10px;
+		border: none;
+		border-radius: 5px;
+		background-color: grey;
+		color: #fff;
+		font-size: 16px;
+		cursor: pointer;
+		transition: background-color 0.2s ease-in-out;
+		margin: 5px;
+	}
 </style>
