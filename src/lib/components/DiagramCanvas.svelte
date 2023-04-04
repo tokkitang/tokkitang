@@ -13,27 +13,41 @@
 	let stage: Konva.Stage;
 	let layer: Konva.Layer;
 
-	// 엔티티가 스폰되는 시작 위치
-	let startX = 50;
-	let startY = 50;
-
-	// 엔티티의 첫번째 타이틀 행 정보
-	let titleRowHeight = 30;
-	let titleRowFontSize = 20;
-
-	// 엔티티 나머지 행의 세로 크기
-	let rowHeight = 25;
-	let rowFontSize = 17;
-
-	// 엔티티의 기본 가로 크기
-	let rowDefaultWidth = 300;
+	const ENTITY = {
+		POSITION: {
+			// 엔티티가 스폰되는 시작 위치
+			DEFAULT_START_X: 50,
+			DEFAULT_START_Y: 50
+		},
+		// 엔티티의 첫번째 타이틀 행 정보
+		TITLE_ROW: {
+			DEFAULT_HEIGHT: 30,
+			DEFAULT_FONT_SIZE: 20,
+			DEFAULT_COLOR: 'black',
+			DEFAULT_STROKE_COLOR: 'black',
+			DEFAULT_STROKE_WIDTH: 4
+		},
+		ROW: {
+			// 엔티티 나머지 행의 세로 크기
+			DEFAULT_HEIGHT: 25,
+			DEFAULT_WIDTH: 300,
+			DEFAULT_FONT_SIZE: 17
+		}
+	};
 
 	const NOTE = {
 		DEFAULT_WIDTH: 200,
 		DEFAULT_HEIGHT: 100,
 		DEFAULT_COLOR: 'grey',
 		DEFAULT_STROKE_COLOR: 'grey',
-		DEFAULT_STROKE_WIDTH: 4
+		DEFAULT_STROKE_WIDTH: 4,
+		DEFAULT_START_X: 50,
+		DEFAULT_START_Y: 50,
+		INPUT: {
+			DEFAULT_WIDTH: 200,
+			DEFAULT_HEIGHT: 100,
+			DEFAULT_FONT_SIZE: 17
+		}
 	};
 
 	const entityMap: Map<string, Konva.Rect> = new Map();
@@ -63,34 +77,34 @@
 		// create shape
 
 		const newEntityGroup = new Konva.Group({
-			x: startX,
-			y: startY,
+			x: ENTITY.POSITION.DEFAULT_START_X,
+			y: ENTITY.POSITION.DEFAULT_START_Y,
 			draggable: true
 		});
 
 		const titleRowGroup = new Konva.Group({
-			x: startX,
-			y: startY
+			x: ENTITY.POSITION.DEFAULT_START_X,
+			y: ENTITY.POSITION.DEFAULT_START_Y
 		});
 
 		titleRowGroup.add(
 			new Konva.Rect({
-				width: rowDefaultWidth,
-				height: titleRowHeight,
-				fill: 'black',
-				stroke: 'black',
-				strokeWidth: 4
+				width: ENTITY.ROW.DEFAULT_WIDTH,
+				height: ENTITY.ROW.DEFAULT_HEIGHT,
+				fill: ENTITY.TITLE_ROW.DEFAULT_COLOR,
+				stroke: ENTITY.TITLE_ROW.DEFAULT_STROKE_COLOR,
+				strokeWidth: ENTITY.TITLE_ROW.DEFAULT_STROKE_WIDTH
 			})
 		);
 
 		const entityNameText = makeInputText(
 			stage,
 			new Konva.Text({
-				width: rowDefaultWidth,
-				height: titleRowHeight,
+				width: ENTITY.ROW.DEFAULT_WIDTH,
+				height: ENTITY.ROW.DEFAULT_HEIGHT,
 				text: 'Empty',
 				fill: 'white',
-				fontSize: titleRowFontSize
+				fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
 			})
 		);
 
@@ -103,8 +117,8 @@
 		});
 		addRowButton.add(
 			new Konva.Text({
-				x: startX,
-				y: startY - 30,
+				x: ENTITY.POSITION.DEFAULT_START_X,
+				y: ENTITY.POSITION.DEFAULT_START_Y - 30,
 				text: '+',
 				fontFamily: 'Calibri',
 				fontSize: 25,
@@ -133,7 +147,8 @@
 
 		console.log(rowCount);
 
-		const startY = titleRowHeight + rowCount * rowHeight;
+		const startX = ENTITY.POSITION.DEFAULT_START_X;
+		const startY = ENTITY.TITLE_ROW.DEFAULT_HEIGHT + rowCount * ENTITY.ROW.DEFAULT_HEIGHT;
 
 		const newRowGroup = new Konva.Group({
 			x: startX,
@@ -142,8 +157,8 @@
 
 		newRowGroup.add(
 			new Konva.Rect({
-				width: rowDefaultWidth,
-				height: rowHeight,
+				width: ENTITY.ROW.DEFAULT_WIDTH,
+				height: ENTITY.ROW.DEFAULT_HEIGHT,
 				fill: 'black',
 				stroke: 'black',
 				strokeWidth: 4
@@ -153,11 +168,11 @@
 		const text = makeInputText(
 			stage,
 			new Konva.Text({
-				width: rowDefaultWidth,
-				height: rowHeight,
+				width: ENTITY.ROW.DEFAULT_WIDTH,
+				height: ENTITY.ROW.DEFAULT_HEIGHT,
 				text: 'Empty',
 				fill: 'white',
-				fontSize: rowFontSize
+				fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
 			})
 		);
 
@@ -170,8 +185,8 @@
 		// create shape
 
 		const newNoteGroup = new Konva.Group({
-			x: startX,
-			y: startY,
+			x: NOTE.DEFAULT_START_X,
+			y: NOTE.DEFAULT_START_Y,
 			draggable: true
 		});
 
@@ -188,11 +203,11 @@
 		const noteText = makeInputText(
 			stage,
 			new Konva.Text({
-				width: rowDefaultWidth,
-				height: titleRowHeight,
+				width: NOTE.INPUT.DEFAULT_WIDTH,
+				height: NOTE.INPUT.DEFAULT_HEIGHT,
 				text: 'Empty',
 				fill: 'white',
-				fontSize: titleRowFontSize
+				fontSize: NOTE.INPUT.DEFAULT_FONT_SIZE
 			})
 		);
 
