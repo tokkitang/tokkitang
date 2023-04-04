@@ -28,7 +28,16 @@
 	// 엔티티의 기본 가로 크기
 	let rowDefaultWidth = 300;
 
+	const NOTE = {
+		DEFAULT_WIDTH: 200,
+		DEFAULT_HEIGHT: 100,
+		DEFAULT_COLOR: 'grey',
+		DEFAULT_STROKE_COLOR: 'grey',
+		DEFAULT_STROKE_WIDTH: 4
+	};
+
 	const entityMap: Map<string, Konva.Rect> = new Map();
+	const noteMap: Map<string, Konva.Rect> = new Map();
 
 	onMount(() => {
 		stage = new Konva.Stage({
@@ -156,12 +165,52 @@
 
 		entityGroup.add(newRowGroup);
 	}
+
+	export async function createNote() {
+		// create shape
+
+		const newNoteGroup = new Konva.Group({
+			x: startX,
+			y: startY,
+			draggable: true
+		});
+
+		newNoteGroup.add(
+			new Konva.Rect({
+				width: NOTE.DEFAULT_WIDTH,
+				height: NOTE.DEFAULT_HEIGHT,
+				fill: NOTE.DEFAULT_COLOR,
+				stroke: NOTE.DEFAULT_STROKE_COLOR,
+				strokeWidth: NOTE.DEFAULT_STROKE_WIDTH
+			})
+		);
+
+		const noteText = makeInputText(
+			stage,
+			new Konva.Text({
+				width: rowDefaultWidth,
+				height: titleRowHeight,
+				text: 'Empty',
+				fill: 'white',
+				fontSize: titleRowFontSize
+			})
+		);
+
+		newNoteGroup.add(noteText);
+
+		layer.add(newNoteGroup);
+
+		// TODO: 서버 연동시에는 서버에서 생성된 id를 받아와야 함
+		// const entityId = Date.now().toString();
+
+		//entityMap.set(entityId, newEntity);
+	}
 </script>
 
 <main class="split">
 	<div class="left">
 		<button on:click={createEntity} class="left-button">Create Entity</button>
-		<button on:click={createEntity} class="left-button">Create Note</button>
+		<button on:click={createNote} class="left-button">Create Note</button>
 	</div>
 	<div class="right">
 		<div id="canvas" />
