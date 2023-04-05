@@ -1,6 +1,11 @@
 import type Konva from 'konva';
 
-export function makeInputText(stage: Konva.Stage, textNode: Konva.Text): Konva.Text {
+// Text 노드에 편집 가능한 textarea를 부착합니다.
+export function makeInputText(
+	stage: Konva.Stage,
+	textNode: Konva.Text,
+	editCallback: (editText: string) => void
+): Konva.Text {
 	textNode.on('dblclick', () => {
 		// create textarea over canvas with absolute position
 
@@ -8,35 +13,49 @@ export function makeInputText(stage: Konva.Stage, textNode: Konva.Text): Konva.T
 		// how to find it?
 
 		// at first lets find position of text node relative to the stage:
-		var textPosition = textNode.getAbsolutePosition();
+		const textPosition = textNode.getAbsolutePosition();
 
 		// then lets find position of stage container on the page:
-		var stageBox = stage.container().getBoundingClientRect();
+		const stageBox = stage.container().getBoundingClientRect();
 
 		// so position of textarea will be the sum of positions above:
-		var areaPosition = {
+		const areaPosition = {
 			x: stageBox.left + textPosition.x,
 			y: stageBox.top + textPosition.y
 		};
 
 		// create textarea and style it
-		var textarea = document.createElement('textarea');
+		const textarea = document.createElement('textarea');
+		textarea.style.backgroundColor = 'transparent'; // 투명 처리
 		document.body.appendChild(textarea);
 
 		textarea.value = textNode.text();
 		textarea.style.position = 'absolute';
 		textarea.style.top = areaPosition.y + 'px';
 		textarea.style.left = areaPosition.x + 'px';
-		textarea.style.width = textNode.width().toString();
+		textarea.style.width = textNode.width().toString() + 'px';
+		textarea.style.height = textNode.height().toString() + 'px';
+		textarea.style.border = 'none';
+
+		textNode.text('');
 
 		textarea.focus();
+
+		const saveTextAndClose = () => {
+			textNode.text(textarea.value);
+			document.body.removeChild(textarea);
+			editCallback(textarea.value);
+		};
 
 		textarea.addEventListener('keydown', function (e) {
 			// hide on enter
 			if (e.keyCode === 13) {
-				textNode.text(textarea.value);
-				document.body.removeChild(textarea);
+				saveTextAndClose();
 			}
+		});
+
+		textarea.addEventListener('focusout', function (e) {
+			saveTextAndClose();
 		});
 	});
 
