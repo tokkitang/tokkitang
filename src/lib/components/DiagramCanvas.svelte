@@ -4,6 +4,11 @@
 	import { makeInputText } from '../utils/konva/makeInputText';
 	import type { Entity } from '$lib/types/Entity';
 	import type { Note } from '$lib/types/Note';
+	import { createNote } from '../api/note/create-note';
+	import { page } from '$app/stores';
+
+	export const accessToken: string = $page.data.accessToken;
+	export const projectId: string = $page.data.projectId;
 
 	export let entityList: Entity[];
 	export let noteList: Note[];
@@ -71,6 +76,8 @@
 		// box.on('mouseout', function () {
 		// 	document.body.style.cursor = 'default';
 		// });
+
+		noteList.map((note) => renderNote(note));
 	});
 
 	export async function createEntity() {
@@ -181,12 +188,30 @@
 		entityGroup.add(newRowGroup);
 	}
 
-	export async function createNote() {
+	export async function newNote() {
+		const x = NOTE.DEFAULT_START_X.toString();
+		const y = NOTE.DEFAULT_START_Y.toString();
+		const content = 'Empty';
+
+		const createNoteResponse = await createNote(accessToken, projectId, content, x, y);
+		const noteId = createNoteResponse.note_id;
+
+		const note: Note = {
+			id: noteId,
+			content: content,
+			x,
+			y
+		};
+
+		await renderNote(note);
+	}
+
+	export async function renderNote(note: Note) {
 		// create shape
 
 		const newNoteGroup = new Konva.Group({
-			x: NOTE.DEFAULT_START_X,
-			y: NOTE.DEFAULT_START_Y,
+			x: Number(note.x),
+			y: Number(note.y),
 			draggable: true
 		});
 
@@ -205,7 +230,7 @@
 			new Konva.Text({
 				width: NOTE.INPUT.DEFAULT_WIDTH,
 				height: NOTE.INPUT.DEFAULT_HEIGHT,
-				text: 'Empty',
+				text: note.content,
 				fill: 'white',
 				fontSize: NOTE.INPUT.DEFAULT_FONT_SIZE
 			})
@@ -214,18 +239,13 @@
 		newNoteGroup.add(noteText);
 
 		layer.add(newNoteGroup);
-
-		// TODO: 서버 연동시에는 서버에서 생성된 id를 받아와야 함
-		// const entityId = Date.now().toString();
-
-		//entityMap.set(entityId, newEntity);
 	}
 </script>
 
 <main class="split">
 	<div class="left">
 		<button on:click={createEntity} class="left-button">Create Entity</button>
-		<button on:click={createNote} class="left-button">Create Note</button>
+		<button on:click={newNote} class="left-button">Create Note</button>
 	</div>
 	<div class="right">
 		<div id="canvas" />

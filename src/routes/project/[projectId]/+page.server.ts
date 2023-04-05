@@ -22,10 +22,18 @@ export async function load(page: RequestEvent) {
 			myUserInfo = { ...userInfoResponse };
 			isLogin = true;
 
-			const entityListResponse = await getEntityListByProjectIdWithFetch(page.fetch, accessToken, projectId);
+			const entityListResponse = await getEntityListByProjectIdWithFetch(
+				page.fetch,
+				accessToken,
+				projectId
+			);
 			entityList = entityListResponse.list;
 
-			const noteListResponse = await getNoteListByProjectIdWithFetch(page.fetch, accessToken, projectId);
+			const noteListResponse = await getNoteListByProjectIdWithFetch(
+				page.fetch,
+				accessToken,
+				projectId
+			);
 			noteList = noteListResponse.list;
 		} catch (e) {
 			error = String(e);
@@ -38,6 +46,8 @@ export async function load(page: RequestEvent) {
 		myUserInfo,
 		isLogin,
 		error,
-		entityList, noteList
+		entityList,
+		noteList,
+		projectId
 	};
 }
