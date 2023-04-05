@@ -1,5 +1,6 @@
 import type Konva from 'konva';
 
+// Text 노드에 편집 가능한 textarea를 부착합니다.
 export function makeInputText(stage: Konva.Stage, textNode: Konva.Text): Konva.Text {
 	textNode.on('dblclick', () => {
 		// create textarea over canvas with absolute position
@@ -21,22 +22,35 @@ export function makeInputText(stage: Konva.Stage, textNode: Konva.Text): Konva.T
 
 		// create textarea and style it
 		const textarea = document.createElement('textarea');
+		textarea.style.backgroundColor = 'transparent'; // 투명 처리
 		document.body.appendChild(textarea);
 
 		textarea.value = textNode.text();
 		textarea.style.position = 'absolute';
 		textarea.style.top = areaPosition.y + 'px';
 		textarea.style.left = areaPosition.x + 'px';
-		textarea.style.width = textNode.width().toString();
+		textarea.style.width = textNode.width().toString() + 'px';
+		textarea.style.height = textNode.height().toString() + 'px';
+		textarea.style.border = 'none';
+
+		textNode.text('');
 
 		textarea.focus();
+
+		const saveTextAndClose = () => {
+			textNode.text(textarea.value);
+			document.body.removeChild(textarea);
+		};
 
 		textarea.addEventListener('keydown', function (e) {
 			// hide on enter
 			if (e.keyCode === 13) {
-				textNode.text(textarea.value);
-				document.body.removeChild(textarea);
+				saveTextAndClose();
 			}
+		});
+
+		textarea.addEventListener('focusout', function (e) {
+			saveTextAndClose();
 		});
 	});
 
