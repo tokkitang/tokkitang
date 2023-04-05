@@ -189,6 +189,7 @@
 		entityGroup.add(newRowGroup);
 	}
 
+	// 노트 하나를 생성하고, 서버에 저장, 화면에 렌더링합니다.
 	export async function newNote() {
 		const x = NOTE.DEFAULT_START_X.toString();
 		const y = NOTE.DEFAULT_START_Y.toString();
@@ -207,6 +208,7 @@
 		await renderNote(note);
 	}
 
+	// 개별 노트 데이터를 화면에 렌더링합니다.
 	export async function renderNote(note: Note) {
 		// create shape
 
