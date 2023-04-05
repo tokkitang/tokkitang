@@ -216,6 +216,12 @@
 			draggable: true
 		});
 
+		newNoteGroup.on('dragend', () => {
+			note.x = newNoteGroup.x().toString();
+			note.y = newNoteGroup.y().toString();
+			updateNote(accessToken, note);
+		});
+
 		newNoteGroup.add(
 			new Konva.Rect({
 				width: NOTE.DEFAULT_WIDTH,
