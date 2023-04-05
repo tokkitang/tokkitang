@@ -1,7 +1,11 @@
 import type Konva from 'konva';
 
 // Text 노드에 편집 가능한 textarea를 부착합니다.
-export function makeInputText(stage: Konva.Stage, textNode: Konva.Text): Konva.Text {
+export function makeInputText(
+	stage: Konva.Stage,
+	textNode: Konva.Text,
+	editCallback: (editText: string) => void
+): Konva.Text {
 	textNode.on('dblclick', () => {
 		// create textarea over canvas with absolute position
 
@@ -40,6 +44,7 @@ export function makeInputText(stage: Konva.Stage, textNode: Konva.Text): Konva.T
 		const saveTextAndClose = () => {
 			textNode.text(textarea.value);
 			document.body.removeChild(textarea);
+			editCallback(textarea.value);
 		};
 
 		textarea.addEventListener('keydown', function (e) {

@@ -6,6 +6,7 @@
 	import type { Note } from '$lib/types/Note';
 	import { createNote } from '../api/note/create-note';
 	import { page } from '$app/stores';
+	import { updateNote } from '../api/note/update-note';
 
 	export const accessToken: string = $page.data.accessToken;
 	export const projectId: string = $page.data.projectId;
@@ -233,7 +234,11 @@
 				text: note.content,
 				fill: 'white',
 				fontSize: NOTE.INPUT.DEFAULT_FONT_SIZE
-			})
+			}),
+			(editText) => {
+				note.content = editText;
+				updateNote(accessToken, note);
+			}
 		);
 
 		newNoteGroup.add(noteText);
