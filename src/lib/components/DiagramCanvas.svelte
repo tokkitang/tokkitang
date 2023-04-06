@@ -113,7 +113,8 @@
 				text: 'Empty',
 				fill: 'white',
 				fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
-			})
+			}),
+			() => {}
 		);
 
 		titleRowGroup.add(entityNameText);
@@ -181,7 +182,8 @@
 				text: 'Empty',
 				fill: 'white',
 				fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
-			})
+			}),
+			(foo) => console.log('text changed')
 		);
 
 		newRowGroup.add(text);
