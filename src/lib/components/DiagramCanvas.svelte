@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import Konva from 'konva';
 	import { makeInputText } from '../utils/konva/makeInputText';
-	import type { Entity } from '$lib/types/Entity';
+	import type { Column, Entity } from '$lib/types/Entity';
 	import type { Note } from '$lib/types/Note';
 	import { createNote } from '../api/note/create-note';
 	import { page } from '$app/stores';
@@ -10,6 +10,8 @@
 	import { Renderer } from '../utils/konva/renderer';
 	import { ENTITY } from '../constants/entity';
 	import { NOTE } from '../constants/note';
+	import { createEntity } from '../api/entity/create-entity';
+	import { updateEntity } from '../api/entity/update-entity';
 
 	export const accessToken: string = $page.data.accessToken;
 	export const projectId: string = $page.data.projectId;
@@ -24,8 +26,8 @@
 	let stage: Konva.Stage;
 	let layer: Konva.Layer;
 
-	const entityMap: Map<string, Konva.Rect> = new Map();
-	const noteMap: Map<string, Konva.Rect> = new Map();
+	const entityMap: Map<string, [Entity, Konva.Group]> = new Map();
+	const noteMap: Map<string, [Note, Konva.Group]> = new Map();
 
 	onMount(() => {
 		stage = new Konva.Stage({
@@ -34,7 +36,6 @@
 			height: height ?? window.innerHeight
 		});
 
-		// add canvas element
 		layer = new Konva.Layer();
 		stage.add(layer);
 
@@ -42,77 +43,47 @@
 		renderer.setOnNoteDragEnd((note) => {
 			updateNote(accessToken, note);
 		});
+		renderer.setOnEntityDragEnd((entity) => {
+			updateEntity(accessToken, entity);
+		});
+		renderer.setOnAddRowButtonClicked(() => {});
 
 		noteList.map((note) => renderer.renderNote(note));
+		entityList.map((entity) => renderer.renderEntity(entity));
 	});
 
-	export async function createEntity() {
-		// create shape
+	export async function newEntity() {
+		const x = ENTITY.POSITION.DEFAULT_START_X.toString();
+		const y = ENTITY.POSITION.DEFAULT_START_Y.toString();
+		const comment = '';
+		const logical_name = 'test';
+		const physical_name = 'test';
+		const columns: Column[] = [];
 
-		const newEntityGroup = new Konva.Group({
-			x: ENTITY.POSITION.DEFAULT_START_X,
-			y: ENTITY.POSITION.DEFAULT_START_Y,
-			draggable: true
-		});
-
-		const titleRowGroup = new Konva.Group({
-			x: ENTITY.POSITION.DEFAULT_START_X,
-			y: ENTITY.POSITION.DEFAULT_START_Y
-		});
-
-		titleRowGroup.add(
-			new Konva.Rect({
-				width: ENTITY.ROW.DEFAULT_WIDTH,
-				height: ENTITY.ROW.DEFAULT_HEIGHT,
-				fill: ENTITY.TITLE_ROW.DEFAULT_COLOR,
-				stroke: ENTITY.TITLE_ROW.DEFAULT_STROKE_COLOR,
-				strokeWidth: ENTITY.TITLE_ROW.DEFAULT_STROKE_WIDTH
-			})
+		const createEntityResponse = await createEntity(
+			accessToken,
+			projectId,
+			logical_name,
+			physical_name,
+			comment,
+			columns,
+			x,
+			y
 		);
+		const entityId = createEntityResponse.entity_id;
 
-		const entityNameText = makeInputText(
-			stage,
-			new Konva.Text({
-				width: ENTITY.ROW.DEFAULT_WIDTH,
-				height: ENTITY.ROW.DEFAULT_HEIGHT,
-				text: 'Empty',
-				fill: 'white',
-				fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
-			}),
-			() => {}
-		);
+		const entity: Entity = {
+			id: entityId,
+			logical_name,
+			physical_name,
+			comment,
+			columns,
+			x,
+			y
+		};
 
-		titleRowGroup.add(entityNameText);
-
-		newEntityGroup.add(titleRowGroup);
-
-		const addRowButton = new Konva.Label({
-			opacity: 0.75
-		});
-		addRowButton.add(
-			new Konva.Text({
-				x: ENTITY.POSITION.DEFAULT_START_X,
-				y: ENTITY.POSITION.DEFAULT_START_Y - 30,
-				text: '+',
-				fontFamily: 'Calibri',
-				fontSize: 25,
-				padding: 2,
-				fill: 'black'
-			})
-		);
-
-		addRowButton.on('click', () => {
-			addRowToEntity(newEntityGroup);
-		});
-
-		newEntityGroup.add(addRowButton);
-
-		layer.add(newEntityGroup);
-
-		// TODO: 서버 연동시에는 서버에서 생성된 id를 받아와야 함
-		// const entityId = Date.now().toString();
-
-		// entityMap.set(entityId, newEntity);
+		const newGroup = await renderer.renderEntity(entity);
+		entityMap.set(entityId, [entity, newGroup]);
 	}
 
 	// 엔티티에 행 추가
@@ -172,14 +143,15 @@
 			y
 		};
 
-		await renderer.renderNote(note);
+		const newGroup = await renderer.renderNote(note);
+		noteMap.set(noteId, [note, newGroup]);
 	}
 </script>
 
 <main class="split">
 	<div class="left">
-		<button on:click={createEntity} class="left-button">Create Entity</button>
-		<button on:click={newNote} class="left-button">Create Note</button>
+		<button on:click={newEntity} class="left-button">New Entity</button>
+		<button on:click={newNote} class="left-button">New Note</button>
 	</div>
 	<div class="right">
 		<div id="canvas" />
