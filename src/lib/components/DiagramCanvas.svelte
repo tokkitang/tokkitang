@@ -7,9 +7,14 @@
 	import { createNote } from '../api/note/create-note';
 	import { page } from '$app/stores';
 	import { updateNote } from '../api/note/update-note';
+	import { Renderer } from '../utils/konva/renderer';
+	import { ENTITY } from '../constants/entity';
+	import { NOTE } from '../constants/note';
 
 	export const accessToken: string = $page.data.accessToken;
 	export const projectId: string = $page.data.projectId;
+
+	export let renderer: Renderer;
 
 	export let entityList: Entity[];
 	export let noteList: Note[];
@@ -18,43 +23,6 @@
 
 	let stage: Konva.Stage;
 	let layer: Konva.Layer;
-
-	const ENTITY = {
-		POSITION: {
-			// 엔티티가 스폰되는 시작 위치
-			DEFAULT_START_X: 50,
-			DEFAULT_START_Y: 50
-		},
-		// 엔티티의 첫번째 타이틀 행 정보
-		TITLE_ROW: {
-			DEFAULT_HEIGHT: 30,
-			DEFAULT_FONT_SIZE: 20,
-			DEFAULT_COLOR: 'black',
-			DEFAULT_STROKE_COLOR: 'black',
-			DEFAULT_STROKE_WIDTH: 4
-		},
-		ROW: {
-			// 엔티티 나머지 행의 세로 크기
-			DEFAULT_HEIGHT: 25,
-			DEFAULT_WIDTH: 300,
-			DEFAULT_FONT_SIZE: 17
-		}
-	};
-
-	const NOTE = {
-		DEFAULT_WIDTH: 200,
-		DEFAULT_HEIGHT: 100,
-		DEFAULT_COLOR: 'grey',
-		DEFAULT_STROKE_COLOR: 'grey',
-		DEFAULT_STROKE_WIDTH: 4,
-		DEFAULT_START_X: 50,
-		DEFAULT_START_Y: 50,
-		INPUT: {
-			DEFAULT_WIDTH: 200,
-			DEFAULT_HEIGHT: 100,
-			DEFAULT_FONT_SIZE: 17
-		}
-	};
 
 	const entityMap: Map<string, Konva.Rect> = new Map();
 	const noteMap: Map<string, Konva.Rect> = new Map();
@@ -70,15 +38,12 @@
 		layer = new Konva.Layer();
 		stage.add(layer);
 
-		// // add cursor styling
-		// box.on('mouseover', function () {
-		// 	document.body.style.cursor = 'pointer';
-		// });
-		// box.on('mouseout', function () {
-		// 	document.body.style.cursor = 'default';
-		// });
+		renderer = new Renderer(stage, layer);
+		renderer.setOnNoteDragEnd((note) => {
+			updateNote(accessToken, note);
+		});
 
-		noteList.map((note) => renderNote(note));
+		noteList.map((note) => renderer.renderNote(note));
 	});
 
 	export async function createEntity() {
@@ -207,53 +172,7 @@
 			y
 		};
 
-		await renderNote(note);
-	}
-
-	// 개별 노트 데이터를 화면에 렌더링합니다.
-	export async function renderNote(note: Note) {
-		// create shape
-
-		const newNoteGroup = new Konva.Group({
-			x: Number(note.x),
-			y: Number(note.y),
-			draggable: true
-		});
-
-		newNoteGroup.on('dragend', () => {
-			note.x = newNoteGroup.x().toString();
-			note.y = newNoteGroup.y().toString();
-			updateNote(accessToken, note);
-		});
-
-		newNoteGroup.add(
-			new Konva.Rect({
-				width: NOTE.DEFAULT_WIDTH,
-				height: NOTE.DEFAULT_HEIGHT,
-				fill: NOTE.DEFAULT_COLOR,
-				stroke: NOTE.DEFAULT_STROKE_COLOR,
-				strokeWidth: NOTE.DEFAULT_STROKE_WIDTH
-			})
-		);
-
-		const noteText = makeInputText(
-			stage,
-			new Konva.Text({
-				width: NOTE.INPUT.DEFAULT_WIDTH,
-				height: NOTE.INPUT.DEFAULT_HEIGHT,
-				text: note.content,
-				fill: 'white',
-				fontSize: NOTE.INPUT.DEFAULT_FONT_SIZE
-			}),
-			(editText) => {
-				note.content = editText;
-				updateNote(accessToken, note);
-			}
-		);
-
-		newNoteGroup.add(noteText);
-
-		layer.add(newNoteGroup);
+		await renderer.renderNote(note);
 	}
 </script>
 
