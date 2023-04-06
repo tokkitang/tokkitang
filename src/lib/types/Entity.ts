@@ -3,6 +3,8 @@ export type Column = {
 	logical_name: string;
 	physical_name: string;
 	is_primary_key: boolean;
+	data_type: string;
+	default_value: string;
 	nullable: boolean;
 	comment: string;
 };
