@@ -4,6 +4,7 @@ import { NOTE } from '../../constants/note';
 import type { Column, Entity } from '../../types/Entity';
 import type { Note } from '../../types/Note';
 import { makeInputText } from './makeInputText';
+import { v4 as uuidv4 } from 'uuid';
 
 export type OnNoteChanged = (note: Note) => void | Promise<void>;
 export type OnEntityChanged = (entity: Entity) => void | Promise<void>;
@@ -112,7 +113,7 @@ export class Renderer {
 			new Konva.Text({
 				width: ENTITY.ROW.DEFAULT_WIDTH,
 				height: ENTITY.ROW.DEFAULT_HEIGHT,
-				text: 'Empty',
+				text: entity.logical_name,
 				fill: 'white',
 				fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
 			}),
@@ -144,6 +145,7 @@ export class Renderer {
 		addRowButton.on('click', () => {
 			this.addColumnToEntity(entity);
 			this.renderEntityColumn(newEntityGroup, entity, entity.columns.length - 1);
+			this.onEntityChanged?.(entity);
 		});
 
 		newEntityGroup.add(addRowButton);
@@ -207,7 +209,7 @@ export class Renderer {
 	// 엔티티에 행 추가
 	addColumnToEntity(entity: Entity) {
 		const column: Column = {
-			id: '',
+			id: uuidv4(),
 			logical_name: 'logical',
 			physical_name: 'physical',
 			comment: '',
