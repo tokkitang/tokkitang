@@ -14,7 +14,7 @@
 	onMount(async () => {
 		console.log('$page.data', $page.data);
 
-		if (accessToken === null) {
+		if (accessToken === null || accessToken === undefined) {
 			const path = window.location.pathname;
 			if (['/mypage'].includes(path)) {
 				movePage('/login');
