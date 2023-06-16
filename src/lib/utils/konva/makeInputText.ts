@@ -39,6 +39,7 @@ export function makeInputText({ stage, textNode, editCallback }: MakeInputTextOp
 		textarea.style.width = textNode.width().toString() + 'px';
 		textarea.style.height = textNode.height().toString() + 'px';
 		textarea.style.border = 'none';
+		textarea.style.color = 'white';
 
 		textNode.text('');
 
