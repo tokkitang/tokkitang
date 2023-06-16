@@ -10,12 +10,14 @@ export type OnNoteChanged = (note: Note) => void | Promise<void>;
 export type OnEntityChanged = (entity: Entity) => void | Promise<void>;
 
 export class Renderer {
-	private stage: Konva.Stage;
-	private layer: Konva.Layer;
+	private stage: Konva.Stage | undefined;
+	private layer: Konva.Layer | undefined;
 	private onNoteChanged: OnNoteChanged | null = null;
 	private onEntityChanged: OnEntityChanged | null = null;
 
-	constructor(stage: Konva.Stage, layer: Konva.Layer) {
+	constructor() {}
+
+	init(stage: Konva.Stage, layer: Konva.Layer) {
 		this.stage = stage;
 		this.layer = layer;
 	}
@@ -53,24 +55,24 @@ export class Renderer {
 			})
 		);
 
-		const noteText = makeInputText(
-			this.stage,
-			new Konva.Text({
+		const noteText = makeInputText({
+			stage: this.stage!,
+			textNode: new Konva.Text({
 				width: NOTE.INPUT.DEFAULT_WIDTH,
 				height: NOTE.INPUT.DEFAULT_HEIGHT,
 				text: note.content,
 				fill: 'white',
 				fontSize: NOTE.INPUT.DEFAULT_FONT_SIZE
 			}),
-			(editText) => {
+			editCallback: (editText) => {
 				note.content = editText;
 				this.onNoteChanged?.(note);
 			}
-		);
+		});
 
 		newNoteGroup.add(noteText);
 
-		this.layer.add(newNoteGroup);
+		this.layer?.add(newNoteGroup);
 
 		return newNoteGroup;
 	}
@@ -98,9 +100,11 @@ export class Renderer {
 			y: 0
 		});
 
+		// Left side
 		titleRowGroup.add(
 			new Konva.Rect({
-				width: ENTITY.ROW.DEFAULT_WIDTH,
+				x: 0,
+				width: Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 2),
 				height: ENTITY.ROW.DEFAULT_HEIGHT,
 				fill: ENTITY.TITLE_ROW.DEFAULT_COLOR,
 				stroke: ENTITY.TITLE_ROW.DEFAULT_STROKE_COLOR,
@@ -108,22 +112,53 @@ export class Renderer {
 			})
 		);
 
-		const entityNameText = makeInputText(
-			this.stage,
-			new Konva.Text({
-				width: ENTITY.ROW.DEFAULT_WIDTH,
-				height: ENTITY.ROW.DEFAULT_HEIGHT,
-				text: entity.logical_name,
-				fill: 'white',
-				fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
-			}),
-			(editText) => {
-				entity.physical_name = editText;
-				this.onEntityChanged?.(entity);
-			}
+		titleRowGroup.add(
+			makeInputText({
+				stage: this.stage!,
+				textNode: new Konva.Text({
+					x: 0,
+					width: Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 2),
+					height: ENTITY.ROW.DEFAULT_HEIGHT,
+					text: entity.logical_name,
+					fill: 'white',
+					fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
+				}),
+				editCallback: (editText) => {
+					entity.physical_name = editText;
+					this.onEntityChanged?.(entity);
+				}
+			})
 		);
 
-		titleRowGroup.add(entityNameText);
+		// Right side
+		titleRowGroup.add(
+			new Konva.Rect({
+				x: Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 2),
+				width: Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 2),
+				height: ENTITY.ROW.DEFAULT_HEIGHT,
+				fill: ENTITY.TITLE_ROW.DEFAULT_COLOR,
+				stroke: ENTITY.TITLE_ROW.DEFAULT_STROKE_COLOR,
+				strokeWidth: ENTITY.TITLE_ROW.DEFAULT_STROKE_WIDTH
+			})
+		);
+
+		titleRowGroup.add(
+			makeInputText({
+				stage: this.stage!,
+				textNode: new Konva.Text({
+					x: Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 2),
+					width: Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 2),
+					height: ENTITY.ROW.DEFAULT_HEIGHT,
+					text: entity.physical_name,
+					fill: 'white',
+					fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
+				}),
+				editCallback: (editText) => {
+					entity.physical_name = editText;
+					this.onEntityChanged?.(entity);
+				}
+			})
+		);
 
 		newEntityGroup.add(titleRowGroup);
 
@@ -143,6 +178,7 @@ export class Renderer {
 		);
 
 		addRowButton.on('click', () => {
+			console.log('addRowButton clicked');
 			this.addColumnToEntity(entity);
 			this.renderEntityColumn(newEntityGroup, entity, entity.columns.length - 1);
 			this.onEntityChanged?.(entity);
@@ -150,7 +186,7 @@ export class Renderer {
 
 		newEntityGroup.add(addRowButton);
 
-		this.layer.add(newEntityGroup);
+		this.layer?.add(newEntityGroup);
 
 		// columns rendering
 		let i = 0;
@@ -185,21 +221,21 @@ export class Renderer {
 			})
 		);
 
-		const text = makeInputText(
-			this.stage,
-			new Konva.Text({
+		const text = makeInputText({
+			stage: this.stage!,
+			textNode: new Konva.Text({
 				width: ENTITY.ROW.DEFAULT_WIDTH,
 				height: ENTITY.ROW.DEFAULT_HEIGHT,
 				text: column.logical_name,
 				fill: 'white',
 				fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
 			}),
-			(editText) => {
+			editCallback: (editText) => {
 				column.logical_name = editText;
 				entity.columns[index] = column;
 				this.onEntityChanged?.(entity);
 			}
-		);
+		});
 
 		newRowGroup.add(text);
 

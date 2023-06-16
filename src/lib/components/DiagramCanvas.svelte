@@ -16,7 +16,7 @@
 	export const accessToken: string = $page.data.accessToken;
 	export const projectId: string = $page.data.projectId;
 
-	export let renderer: Renderer;
+	export let renderer: Renderer = new Renderer();
 
 	export let entityList: Entity[];
 	export let noteList: Note[];
@@ -39,7 +39,7 @@
 		layer = new Konva.Layer();
 		stage.add(layer);
 
-		renderer = new Renderer(stage, layer);
+		renderer.init(stage, layer);
 		renderer.setOnNoteChanged((note) => {
 			updateNote(accessToken, note);
 		});
