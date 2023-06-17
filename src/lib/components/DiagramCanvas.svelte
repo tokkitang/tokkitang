@@ -104,12 +104,16 @@
 		const newGroup = await renderer.renderNote(note);
 		noteMap.set(noteId, [note, newGroup]);
 	}
+
+	// 다이어그램을 SQL이나 ORM 정의로 방출합니다.
+	export async function doExport() {}
 </script>
 
 <main class="split">
 	<div class="left">
 		<button on:click={newEntity} class="left-button">New Entity</button>
 		<button on:click={newNote} class="left-button">New Note</button>
+		<button on:click={doExport} class="left-button">Export</button>
 	</div>
 	<div class="right">
 		<div id="canvas" />
