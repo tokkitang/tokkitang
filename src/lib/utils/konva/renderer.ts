@@ -224,7 +224,7 @@ export class Renderer {
 				x: startX,
 				width: logicalNameWidth,
 				height: ENTITY.ROW.DEFAULT_HEIGHT,
-				fill: 'black',
+				fill: ENTITY.ROW.DEFAULT_COLOR,
 				stroke: ENTITY.ROW.DEFAULT_STROKE_COLOR,
 				strokeWidth: ENTITY.ROW.DEFAULT_STROKE_WIDTH
 			})
@@ -257,7 +257,7 @@ export class Renderer {
 				x: startX,
 				width: physicalNameWidth,
 				height: ENTITY.ROW.DEFAULT_HEIGHT,
-				fill: 'black',
+				fill: ENTITY.ROW.DEFAULT_COLOR,
 				stroke: ENTITY.ROW.DEFAULT_STROKE_COLOR,
 				strokeWidth: ENTITY.ROW.DEFAULT_STROKE_WIDTH
 			})
@@ -291,7 +291,7 @@ export class Renderer {
 				x: startX,
 				width: typeWidth,
 				height: ENTITY.ROW.DEFAULT_HEIGHT,
-				fill: 'black',
+				fill: ENTITY.ROW.DEFAULT_COLOR,
 				stroke: ENTITY.ROW.DEFAULT_STROKE_COLOR,
 				strokeWidth: ENTITY.ROW.DEFAULT_STROKE_WIDTH
 			})
@@ -325,7 +325,7 @@ export class Renderer {
 				x: startX,
 				width: typeWidth,
 				height: ENTITY.ROW.DEFAULT_HEIGHT,
-				fill: 'black',
+				fill: ENTITY.ROW.DEFAULT_COLOR,
 				stroke: ENTITY.ROW.DEFAULT_STROKE_COLOR,
 				strokeWidth: ENTITY.ROW.DEFAULT_STROKE_WIDTH
 			})
@@ -359,7 +359,7 @@ export class Renderer {
 				x: startX,
 				width: commentWidth,
 				height: ENTITY.ROW.DEFAULT_HEIGHT,
-				fill: 'black',
+				fill: ENTITY.ROW.DEFAULT_COLOR,
 				stroke: ENTITY.ROW.DEFAULT_STROKE_COLOR,
 				strokeWidth: ENTITY.ROW.DEFAULT_STROKE_WIDTH
 			})
