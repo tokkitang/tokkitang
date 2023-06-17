@@ -190,7 +190,7 @@ export class Renderer {
 
 		// columns rendering
 		let i = 0;
-		for (const column of entity.columns) {
+		for (const _column of entity.columns) {
 			await this.renderEntityColumn(newEntityGroup, entity, i);
 			i += 1;
 		}
@@ -203,7 +203,13 @@ export class Renderer {
 
 		const rowCount = entityGroup.getChildren().length;
 
-		const startX = 0;
+		const logicalNameWidth = Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 5);
+		const physicalNameWidth = Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 5);
+		const typeWidth = Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 5);
+		const notNullWidth = Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 5);
+		const commentWidth = Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 5);
+
+		let startX = 0;
 		const startY = (rowCount - 1) * ENTITY.ROW.DEFAULT_HEIGHT;
 
 		const newRowGroup = new Konva.Group({
@@ -211,9 +217,11 @@ export class Renderer {
 			y: startY
 		});
 
+		// Logical name
 		newRowGroup.add(
 			new Konva.Rect({
-				width: ENTITY.ROW.DEFAULT_WIDTH,
+				x: startX,
+				width: logicalNameWidth,
 				height: ENTITY.ROW.DEFAULT_HEIGHT,
 				fill: 'black',
 				stroke: 'black',
@@ -221,25 +229,162 @@ export class Renderer {
 			})
 		);
 
-		const text = makeInputText({
-			stage: this.stage!,
-			textNode: new Konva.Text({
-				width: ENTITY.ROW.DEFAULT_WIDTH,
-				height: ENTITY.ROW.DEFAULT_HEIGHT,
-				text: column.logical_name,
-				fill: 'white',
-				fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
-			}),
-			editCallback: (editText) => {
-				column.logical_name = editText;
-				entity.columns[index] = column;
-				this.onEntityChanged?.(entity);
-			}
-		});
-
-		newRowGroup.add(text);
+		newRowGroup.add(
+			makeInputText({
+				stage: this.stage!,
+				textNode: new Konva.Text({
+					width: logicalNameWidth,
+					height: ENTITY.ROW.DEFAULT_HEIGHT,
+					text: column.logical_name,
+					fill: 'white',
+					fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
+				}),
+				editCallback: (editText) => {
+					column.logical_name = editText;
+					entity.columns[index] = column;
+					this.onEntityChanged?.(entity);
+				}
+			})
+		);
 
 		entityGroup.add(newRowGroup);
+		startX += logicalNameWidth;
+
+		// Physical name
+		newRowGroup.add(
+			new Konva.Rect({
+				x: startX,
+				width: physicalNameWidth,
+				height: ENTITY.ROW.DEFAULT_HEIGHT,
+				fill: 'black',
+				stroke: 'black',
+				strokeWidth: 4
+			})
+		);
+
+		newRowGroup.add(
+			makeInputText({
+				stage: this.stage!,
+				textNode: new Konva.Text({
+					x: startX,
+					width: physicalNameWidth,
+					height: ENTITY.ROW.DEFAULT_HEIGHT,
+					text: column.physical_name,
+					fill: 'white',
+					fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
+				}),
+				editCallback: (editText) => {
+					column.physical_name = editText;
+					entity.columns[index] = column;
+					this.onEntityChanged?.(entity);
+				}
+			})
+		);
+
+		entityGroup.add(newRowGroup);
+		startX += physicalNameWidth;
+
+		// type
+		newRowGroup.add(
+			new Konva.Rect({
+				x: startX,
+				width: typeWidth,
+				height: ENTITY.ROW.DEFAULT_HEIGHT,
+				fill: 'black',
+				stroke: 'black',
+				strokeWidth: 4
+			})
+		);
+
+		newRowGroup.add(
+			makeInputText({
+				stage: this.stage!,
+				textNode: new Konva.Text({
+					x: startX,
+					width: typeWidth,
+					height: ENTITY.ROW.DEFAULT_HEIGHT,
+					text: column.data_type,
+					fill: 'white',
+					fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
+				}),
+				editCallback: (editText) => {
+					column.data_type = editText;
+					entity.columns[index] = column;
+					this.onEntityChanged?.(entity);
+				}
+			})
+		);
+
+		entityGroup.add(newRowGroup);
+		startX += typeWidth;
+
+		// not null
+		newRowGroup.add(
+			new Konva.Rect({
+				x: startX,
+				width: typeWidth,
+				height: ENTITY.ROW.DEFAULT_HEIGHT,
+				fill: 'black',
+				stroke: 'black',
+				strokeWidth: 4
+			})
+		);
+
+		newRowGroup.add(
+			makeInputText({
+				stage: this.stage!,
+				textNode: new Konva.Text({
+					x: startX,
+					width: notNullWidth,
+					height: ENTITY.ROW.DEFAULT_HEIGHT,
+					text: column.nullable ? 'Allow Null' : 'Not Null',
+					fill: 'white',
+					fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
+				}),
+				editCallback: (editText) => {
+					column.nullable = !!editText; // TODO: change to boolean checkbox
+					entity.columns[index] = column;
+					this.onEntityChanged?.(entity);
+				}
+			})
+		);
+
+		entityGroup.add(newRowGroup);
+		startX += notNullWidth;
+
+		// comment
+		newRowGroup.add(
+			new Konva.Rect({
+				x: startX,
+				width: commentWidth,
+				height: ENTITY.ROW.DEFAULT_HEIGHT,
+				fill: 'black',
+				stroke: 'black',
+				strokeWidth: 4
+			})
+		);
+
+		newRowGroup.add(
+			makeInputText({
+				stage: this.stage!,
+				textNode: new Konva.Text({
+					x: startX,
+					width: commentWidth,
+					height: ENTITY.ROW.DEFAULT_HEIGHT,
+					text: column.comment,
+					fill: 'white',
+					fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
+				}),
+				editCallback: (editText) => {
+					column.comment = editText;
+					entity.columns[index] = column;
+					this.onEntityChanged?.(entity);
+				}
+			})
+		);
+
+		entityGroup.add(newRowGroup);
+		startX += commentWidth;
 	}
 
 	// 엔티티에 행 추가
@@ -248,8 +393,8 @@ export class Renderer {
 			id: uuidv4(),
 			logical_name: 'logical',
 			physical_name: 'physical',
-			comment: '',
-			data_type: '',
+			comment: 'comment',
+			data_type: 'type',
 			nullable: false,
 			is_primary_key: false,
 			default_value: ''
