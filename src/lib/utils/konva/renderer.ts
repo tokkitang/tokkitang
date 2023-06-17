@@ -4,33 +4,30 @@ import { NOTE } from '../../constants/note';
 import type { Column, Entity } from '../../types/Entity';
 import type { Note } from '../../types/Note';
 import { makeInputText } from './makeInputText';
+import { v4 as uuidv4 } from 'uuid';
 
-export type OnNoteDragEnd = (note: Note) => void;
-export type OnEntityDragEnd = (entity: Entity) => void;
-export type OnAddRowButtonClicked = () => void;
+export type OnNoteChanged = (note: Note) => void | Promise<void>;
+export type OnEntityChanged = (entity: Entity) => void | Promise<void>;
 
 export class Renderer {
-	private stage: Konva.Stage;
-	private layer: Konva.Layer;
-	private onNoteDragEnd: OnNoteDragEnd | null = null;
-	private onEntityDragEnd: OnEntityDragEnd | null = null;
-	private onAddRowButtonClicked: OnAddRowButtonClicked | null = null;
+	private stage: Konva.Stage | undefined;
+	private layer: Konva.Layer | undefined;
+	private onNoteChanged: OnNoteChanged | null = null;
+	private onEntityChanged: OnEntityChanged | null = null;
 
-	constructor(stage: Konva.Stage, layer: Konva.Layer) {
+	constructor() {}
+
+	init(stage: Konva.Stage, layer: Konva.Layer) {
 		this.stage = stage;
 		this.layer = layer;
 	}
 
-	async setOnNoteDragEnd(callback: OnNoteDragEnd) {
-		this.onNoteDragEnd = callback;
+	async setOnNoteChanged(callback: OnNoteChanged) {
+		this.onNoteChanged = callback;
 	}
 
-	async setOnAddRowButtonClicked(callback: OnAddRowButtonClicked) {
-		this.onAddRowButtonClicked = callback;
-	}
-
-	async setOnEntityDragEnd(callback: OnEntityDragEnd) {
-		this.onEntityDragEnd = callback;
+	async setOnEntityChanged(callback: OnEntityChanged) {
+		this.onEntityChanged = callback;
 	}
 
 	async renderNote(note: Note): Promise<Konva.Group> {
@@ -43,7 +40,9 @@ export class Renderer {
 		newNoteGroup.on('dragend', () => {
 			note.x = newNoteGroup.x().toString();
 			note.y = newNoteGroup.y().toString();
-			this.onNoteDragEnd?.(note);
+			console.log('note.x', note.x);
+			console.log('note.y', note.y);
+			this.onNoteChanged?.(note);
 		});
 
 		newNoteGroup.add(
@@ -56,24 +55,24 @@ export class Renderer {
 			})
 		);
 
-		const noteText = makeInputText(
-			this.stage,
-			new Konva.Text({
+		const noteText = makeInputText({
+			stage: this.stage!,
+			textNode: new Konva.Text({
 				width: NOTE.INPUT.DEFAULT_WIDTH,
 				height: NOTE.INPUT.DEFAULT_HEIGHT,
 				text: note.content,
 				fill: 'white',
 				fontSize: NOTE.INPUT.DEFAULT_FONT_SIZE
 			}),
-			(editText) => {
+			editCallback: (editText) => {
 				note.content = editText;
-				this.onNoteDragEnd?.(note);
+				this.onNoteChanged?.(note);
 			}
-		);
+		});
 
 		newNoteGroup.add(noteText);
 
-		this.layer.add(newNoteGroup);
+		this.layer?.add(newNoteGroup);
 
 		return newNoteGroup;
 	}
@@ -91,17 +90,21 @@ export class Renderer {
 		newEntityGroup.on('dragend', () => {
 			entity.x = newEntityGroup.x().toString();
 			entity.y = newEntityGroup.y().toString();
-			this.onEntityDragEnd?.(entity);
+			console.log('entity.x', entity.x);
+			console.log('entity.y', entity.y);
+			this.onEntityChanged?.(entity);
 		});
 
 		const titleRowGroup = new Konva.Group({
-			x,
-			y
+			x: 0,
+			y: 0
 		});
 
+		// Left side
 		titleRowGroup.add(
 			new Konva.Rect({
-				width: ENTITY.ROW.DEFAULT_WIDTH,
+				x: 0,
+				width: Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 2),
 				height: ENTITY.ROW.DEFAULT_HEIGHT,
 				fill: ENTITY.TITLE_ROW.DEFAULT_COLOR,
 				stroke: ENTITY.TITLE_ROW.DEFAULT_STROKE_COLOR,
@@ -109,19 +112,54 @@ export class Renderer {
 			})
 		);
 
-		const entityNameText = makeInputText(
-			this.stage,
-			new Konva.Text({
-				width: ENTITY.ROW.DEFAULT_WIDTH,
-				height: ENTITY.ROW.DEFAULT_HEIGHT,
-				text: 'Empty',
-				fill: 'white',
-				fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
-			}),
-			() => {}
+		titleRowGroup.add(
+			makeInputText({
+				stage: this.stage!,
+				textNode: new Konva.Text({
+					x: 0 + ENTITY.TITLE_ROW.DEFAULT_STROKE_WIDTH,
+					y: 0 + ENTITY.TITLE_ROW.DEFAULT_STROKE_WIDTH,
+					width: Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 2),
+					height: ENTITY.ROW.DEFAULT_HEIGHT,
+					text: entity.logical_name,
+					fill: 'white',
+					fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
+				}),
+				editCallback: (editText) => {
+					entity.physical_name = editText;
+					this.onEntityChanged?.(entity);
+				}
+			})
 		);
 
-		titleRowGroup.add(entityNameText);
+		// Right side
+		titleRowGroup.add(
+			new Konva.Rect({
+				x: Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 2),
+				width: Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 2),
+				height: ENTITY.ROW.DEFAULT_HEIGHT,
+				fill: ENTITY.TITLE_ROW.DEFAULT_COLOR,
+				stroke: ENTITY.TITLE_ROW.DEFAULT_STROKE_COLOR,
+				strokeWidth: ENTITY.TITLE_ROW.DEFAULT_STROKE_WIDTH
+			})
+		);
+
+		titleRowGroup.add(
+			makeInputText({
+				stage: this.stage!,
+				textNode: new Konva.Text({
+					x: Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 2),
+					width: Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 2),
+					height: ENTITY.ROW.DEFAULT_HEIGHT,
+					text: entity.physical_name,
+					fill: 'white',
+					fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
+				}),
+				editCallback: (editText) => {
+					entity.physical_name = editText;
+					this.onEntityChanged?.(entity);
+				}
+			})
+		);
 
 		newEntityGroup.add(titleRowGroup);
 
@@ -130,8 +168,8 @@ export class Renderer {
 		});
 		addRowButton.add(
 			new Konva.Text({
-				x,
-				y: y - 30,
+				x: 0,
+				y: -30,
 				text: '+',
 				fontFamily: 'Calibri',
 				fontSize: 25,
@@ -141,13 +179,228 @@ export class Renderer {
 		);
 
 		addRowButton.on('click', () => {
-			this.onAddRowButtonClicked?.();
+			console.log('addRowButton clicked');
+			this.addColumnToEntity(entity);
+			this.renderEntityColumn(newEntityGroup, entity, entity.columns.length - 1);
+			this.onEntityChanged?.(entity);
 		});
 
 		newEntityGroup.add(addRowButton);
 
-		this.layer.add(newEntityGroup);
+		this.layer?.add(newEntityGroup);
+
+		// columns rendering
+		let i = 0;
+		for (const _column of entity.columns) {
+			await this.renderEntityColumn(newEntityGroup, entity, i);
+			i += 1;
+		}
 
 		return newEntityGroup;
+	}
+
+	async renderEntityColumn(entityGroup: Konva.Group, entity: Entity, index: number) {
+		const column = entity.columns[index];
+
+		const rowCount = entityGroup.getChildren().length;
+
+		const logicalNameWidth = Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 5);
+		const physicalNameWidth = Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 5);
+		const typeWidth = Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 5);
+		const notNullWidth = Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 5);
+		const commentWidth = Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 5);
+
+		let startX = 0;
+		const startY = (rowCount - 1) * ENTITY.ROW.DEFAULT_HEIGHT;
+
+		const newRowGroup = new Konva.Group({
+			x: startX,
+			y: startY
+		});
+
+		// Logical name
+		newRowGroup.add(
+			new Konva.Rect({
+				x: startX,
+				width: logicalNameWidth,
+				height: ENTITY.ROW.DEFAULT_HEIGHT,
+				fill: ENTITY.ROW.DEFAULT_COLOR,
+				stroke: ENTITY.ROW.DEFAULT_STROKE_COLOR,
+				strokeWidth: ENTITY.ROW.DEFAULT_STROKE_WIDTH
+			})
+		);
+
+		newRowGroup.add(
+			makeInputText({
+				stage: this.stage!,
+				textNode: new Konva.Text({
+					width: logicalNameWidth,
+					height: ENTITY.ROW.DEFAULT_HEIGHT,
+					text: column.logical_name,
+					fill: 'white',
+					fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
+				}),
+				editCallback: (editText) => {
+					column.logical_name = editText;
+					entity.columns[index] = column;
+					this.onEntityChanged?.(entity);
+				}
+			})
+		);
+
+		entityGroup.add(newRowGroup);
+		startX += logicalNameWidth;
+
+		// Physical name
+		newRowGroup.add(
+			new Konva.Rect({
+				x: startX,
+				width: physicalNameWidth,
+				height: ENTITY.ROW.DEFAULT_HEIGHT,
+				fill: ENTITY.ROW.DEFAULT_COLOR,
+				stroke: ENTITY.ROW.DEFAULT_STROKE_COLOR,
+				strokeWidth: ENTITY.ROW.DEFAULT_STROKE_WIDTH
+			})
+		);
+
+		newRowGroup.add(
+			makeInputText({
+				stage: this.stage!,
+				textNode: new Konva.Text({
+					x: startX,
+					width: physicalNameWidth,
+					height: ENTITY.ROW.DEFAULT_HEIGHT,
+					text: column.physical_name,
+					fill: 'white',
+					fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
+				}),
+				editCallback: (editText) => {
+					column.physical_name = editText;
+					entity.columns[index] = column;
+					this.onEntityChanged?.(entity);
+				}
+			})
+		);
+
+		entityGroup.add(newRowGroup);
+		startX += physicalNameWidth;
+
+		// type
+		newRowGroup.add(
+			new Konva.Rect({
+				x: startX,
+				width: typeWidth,
+				height: ENTITY.ROW.DEFAULT_HEIGHT,
+				fill: ENTITY.ROW.DEFAULT_COLOR,
+				stroke: ENTITY.ROW.DEFAULT_STROKE_COLOR,
+				strokeWidth: ENTITY.ROW.DEFAULT_STROKE_WIDTH
+			})
+		);
+
+		newRowGroup.add(
+			makeInputText({
+				stage: this.stage!,
+				textNode: new Konva.Text({
+					x: startX,
+					width: typeWidth,
+					height: ENTITY.ROW.DEFAULT_HEIGHT,
+					text: column.data_type,
+					fill: 'white',
+					fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
+				}),
+				editCallback: (editText) => {
+					column.data_type = editText;
+					entity.columns[index] = column;
+					this.onEntityChanged?.(entity);
+				}
+			})
+		);
+
+		entityGroup.add(newRowGroup);
+		startX += typeWidth;
+
+		// not null
+		newRowGroup.add(
+			new Konva.Rect({
+				x: startX,
+				width: typeWidth,
+				height: ENTITY.ROW.DEFAULT_HEIGHT,
+				fill: ENTITY.ROW.DEFAULT_COLOR,
+				stroke: ENTITY.ROW.DEFAULT_STROKE_COLOR,
+				strokeWidth: ENTITY.ROW.DEFAULT_STROKE_WIDTH
+			})
+		);
+
+		newRowGroup.add(
+			makeInputText({
+				stage: this.stage!,
+				textNode: new Konva.Text({
+					x: startX,
+					width: notNullWidth,
+					height: ENTITY.ROW.DEFAULT_HEIGHT,
+					text: column.nullable ? 'Allow Null' : 'Not Null',
+					fill: 'white',
+					fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
+				}),
+				editCallback: (editText) => {
+					column.nullable = !!editText; // TODO: change to boolean checkbox
+					entity.columns[index] = column;
+					this.onEntityChanged?.(entity);
+				}
+			})
+		);
+
+		entityGroup.add(newRowGroup);
+		startX += notNullWidth;
+
+		// comment
+		newRowGroup.add(
+			new Konva.Rect({
+				x: startX,
+				width: commentWidth,
+				height: ENTITY.ROW.DEFAULT_HEIGHT,
+				fill: ENTITY.ROW.DEFAULT_COLOR,
+				stroke: ENTITY.ROW.DEFAULT_STROKE_COLOR,
+				strokeWidth: ENTITY.ROW.DEFAULT_STROKE_WIDTH
+			})
+		);
+
+		newRowGroup.add(
+			makeInputText({
+				stage: this.stage!,
+				textNode: new Konva.Text({
+					x: startX,
+					width: commentWidth,
+					height: ENTITY.ROW.DEFAULT_HEIGHT,
+					text: column.comment,
+					fill: 'white',
+					fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
+				}),
+				editCallback: (editText) => {
+					column.comment = editText;
+					entity.columns[index] = column;
+					this.onEntityChanged?.(entity);
+				}
+			})
+		);
+
+		entityGroup.add(newRowGroup);
+		startX += commentWidth;
+	}
+
+	// 엔티티에 행 추가
+	addColumnToEntity(entity: Entity) {
+		const column: Column = {
+			id: uuidv4(),
+			logical_name: 'logical',
+			physical_name: 'physical',
+			comment: 'comment',
+			data_type: 'type',
+			nullable: false,
+			is_primary_key: false,
+			default_value: ''
+		};
+
+		entity.columns.push(column);
 	}
 }

@@ -16,7 +16,7 @@
 	export const accessToken: string = $page.data.accessToken;
 	export const projectId: string = $page.data.projectId;
 
-	export let renderer: Renderer;
+	export let renderer: Renderer = new Renderer();
 
 	export let entityList: Entity[];
 	export let noteList: Note[];
@@ -29,7 +29,7 @@
 	const entityMap: Map<string, [Entity, Konva.Group]> = new Map();
 	const noteMap: Map<string, [Note, Konva.Group]> = new Map();
 
-	onMount(() => {
+	onMount(async () => {
 		stage = new Konva.Stage({
 			container: 'canvas',
 			width: width ?? window.innerWidth,
@@ -39,14 +39,13 @@
 		layer = new Konva.Layer();
 		stage.add(layer);
 
-		renderer = new Renderer(stage, layer);
-		renderer.setOnNoteDragEnd((note) => {
+		renderer.init(stage, layer);
+		renderer.setOnNoteChanged((note) => {
 			updateNote(accessToken, note);
 		});
-		renderer.setOnEntityDragEnd((entity) => {
+		renderer.setOnEntityChanged((entity) => {
 			updateEntity(accessToken, entity);
 		});
-		renderer.setOnAddRowButtonClicked(() => {});
 
 		noteList.map((note) => renderer.renderNote(note));
 		entityList.map((entity) => renderer.renderEntity(entity));
@@ -56,8 +55,8 @@
 		const x = ENTITY.POSITION.DEFAULT_START_X.toString();
 		const y = ENTITY.POSITION.DEFAULT_START_Y.toString();
 		const comment = '';
-		const logical_name = 'test';
-		const physical_name = 'test';
+		const logical_name = 'logical_name';
+		const physical_name = 'physical_name';
 		const columns: Column[] = [];
 
 		const createEntityResponse = await createEntity(
@@ -86,47 +85,6 @@
 		entityMap.set(entityId, [entity, newGroup]);
 	}
 
-	// 엔티티에 행 추가
-	export function addRowToEntity(entityGroup: Konva.Group) {
-		const rowCount = entityGroup.getChildren().length;
-
-		console.log(rowCount);
-
-		const startX = ENTITY.POSITION.DEFAULT_START_X;
-		const startY = ENTITY.TITLE_ROW.DEFAULT_HEIGHT + rowCount * ENTITY.ROW.DEFAULT_HEIGHT;
-
-		const newRowGroup = new Konva.Group({
-			x: startX,
-			y: startY
-		});
-
-		newRowGroup.add(
-			new Konva.Rect({
-				width: ENTITY.ROW.DEFAULT_WIDTH,
-				height: ENTITY.ROW.DEFAULT_HEIGHT,
-				fill: 'black',
-				stroke: 'black',
-				strokeWidth: 4
-			})
-		);
-
-		const text = makeInputText(
-			stage,
-			new Konva.Text({
-				width: ENTITY.ROW.DEFAULT_WIDTH,
-				height: ENTITY.ROW.DEFAULT_HEIGHT,
-				text: 'Empty',
-				fill: 'white',
-				fontSize: ENTITY.ROW.DEFAULT_FONT_SIZE
-			}),
-			(foo) => console.log('text changed')
-		);
-
-		newRowGroup.add(text);
-
-		entityGroup.add(newRowGroup);
-	}
-
 	// 노트 하나를 생성하고, 서버에 저장, 화면에 렌더링합니다.
 	export async function newNote() {
 		const x = NOTE.DEFAULT_START_X.toString();
@@ -146,12 +104,16 @@
 		const newGroup = await renderer.renderNote(note);
 		noteMap.set(noteId, [note, newGroup]);
 	}
+
+	// 다이어그램을 SQL이나 ORM 정의로 방출합니다.
+	export async function doExport() {}
 </script>
 
 <main class="split">
 	<div class="left">
 		<button on:click={newEntity} class="left-button">New Entity</button>
 		<button on:click={newNote} class="left-button">New Note</button>
+		<button on:click={doExport} class="left-button">Export</button>
 	</div>
 	<div class="right">
 		<div id="canvas" />
