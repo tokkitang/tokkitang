@@ -116,7 +116,8 @@ export class Renderer {
 			makeInputText({
 				stage: this.stage!,
 				textNode: new Konva.Text({
-					x: 0,
+					x: 0 + ENTITY.TITLE_ROW.DEFAULT_STROKE_WIDTH,
+					y: 0 + ENTITY.TITLE_ROW.DEFAULT_STROKE_WIDTH,
 					width: Math.floor(ENTITY.ROW.DEFAULT_WIDTH / 2),
 					height: ENTITY.ROW.DEFAULT_HEIGHT,
 					text: entity.logical_name,
@@ -224,8 +225,8 @@ export class Renderer {
 				width: logicalNameWidth,
 				height: ENTITY.ROW.DEFAULT_HEIGHT,
 				fill: 'black',
-				stroke: 'black',
-				strokeWidth: 4
+				stroke: ENTITY.ROW.DEFAULT_STROKE_COLOR,
+				strokeWidth: ENTITY.ROW.DEFAULT_STROKE_WIDTH
 			})
 		);
 
@@ -257,8 +258,8 @@ export class Renderer {
 				width: physicalNameWidth,
 				height: ENTITY.ROW.DEFAULT_HEIGHT,
 				fill: 'black',
-				stroke: 'black',
-				strokeWidth: 4
+				stroke: ENTITY.ROW.DEFAULT_STROKE_COLOR,
+				strokeWidth: ENTITY.ROW.DEFAULT_STROKE_WIDTH
 			})
 		);
 
@@ -291,8 +292,8 @@ export class Renderer {
 				width: typeWidth,
 				height: ENTITY.ROW.DEFAULT_HEIGHT,
 				fill: 'black',
-				stroke: 'black',
-				strokeWidth: 4
+				stroke: ENTITY.ROW.DEFAULT_STROKE_COLOR,
+				strokeWidth: ENTITY.ROW.DEFAULT_STROKE_WIDTH
 			})
 		);
 
@@ -325,8 +326,8 @@ export class Renderer {
 				width: typeWidth,
 				height: ENTITY.ROW.DEFAULT_HEIGHT,
 				fill: 'black',
-				stroke: 'black',
-				strokeWidth: 4
+				stroke: ENTITY.ROW.DEFAULT_STROKE_COLOR,
+				strokeWidth: ENTITY.ROW.DEFAULT_STROKE_WIDTH
 			})
 		);
 
@@ -359,8 +360,8 @@ export class Renderer {
 				width: commentWidth,
 				height: ENTITY.ROW.DEFAULT_HEIGHT,
 				fill: 'black',
-				stroke: 'black',
-				strokeWidth: 4
+				stroke: ENTITY.ROW.DEFAULT_STROKE_COLOR,
+				strokeWidth: ENTITY.ROW.DEFAULT_STROKE_WIDTH
 			})
 		);
 
