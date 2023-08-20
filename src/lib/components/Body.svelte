@@ -7,7 +7,6 @@
 </body>
 
 <style>
-
     body {
         padding: 8px;
         background-color: inherit;
