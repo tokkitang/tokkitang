@@ -37,7 +37,7 @@ jobs:
           QUERY="query { repository(owner: \\\"$REPO_OWNER\\\", name: \\\"$REPO_NAME\\\") { issue(number: ${{ env.ISSUE_NUMBER }}) { id } } }"
           DATA="{\"query\": \"$QUERY\"}"
           RESPONSE=$(curl -s -H "Authorization: Bearer $TOKEN" -X POST -H "Content-Type: application/json" --data "$DATA" https://api.github.com/graphql)
-          
+
           NODE_ID=$(echo $RESPONSE | jq -r '.data.repository.issue.id')
           if [ "$NODE_ID" == "null" ]; then
             echo "Error: Invalid response from GitHub API"

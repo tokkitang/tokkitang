@@ -58,7 +58,7 @@ jobs:
             }' -f project=$PROJECT_ID -f pr=$ISSUE_ID --jq '.data.addProjectV2ItemById.item.id')"
 
             echo 'ITEM_ID='$item_id >> $GITHUB_ENV
-            
+
       - name: Set fields
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
