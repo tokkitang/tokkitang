@@ -5,13 +5,14 @@ export async function createProject(
 	team_id: string,
 	name: string,
 	description: string,
+	isPublic: boolean,
 	thumbnail_url: string | null
 ): Promise<any> {
 	const response = await mainApi.post('project', {
 		headers: {
 			Authorization: `Bearer ${access_token}`
 		},
-		json: { team_id, name, description, thumbnail_url }
+		json: { team_id, name, description, thumbnail_url, isPublic }
 	});
 
 	return await response.json();
