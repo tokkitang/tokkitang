@@ -77,22 +77,45 @@
 			<h1>New Project</h1>
 
 			<div class="name-div form-control">
-				<label for="name">Project Name</label>
+				<label class="section-label" for="name">Project Name</label>
 				<input id="name" type="text" bind:value={name} />
 			</div>
 
 			<div class="description-div form-control">
-				<label for="description">Description</label>
+				<label class="section-label" for="description">Description</label>
 				<input id="description" type="text" bind:value={description} />
 			</div>
 
 			<div class="public-div form-control">
-				<label for="image">Is Public Project</label>
-				<input id="isPublic" type="checkbox" bind:checked={isPublic} />
+				<label class="section-label" for="image">Project Visibility</label>
+
+				<span class="visibility-item visibility-text"> Private </span>
+				<span class="visibility-item">
+					<input
+						class="visibility-input"
+						type="radio"
+						name="project-visibility"
+						on:change={() => {
+							isPublic = false;
+						}}
+					/>
+				</span>
+
+				<span class="visibility-item visibility-text"> Public </span>
+				<span class="visibility-item">
+					<input
+						class="visibility-input"
+						type="radio"
+						name="project-visibility"
+						on:change={() => {
+							isPublic = true;
+						}}
+					/>
+				</span>
 			</div>
 
 			<div class="image-div form-control">
-				<label for="image">Project Thumbnail</label>
+				<label class="section-label" for="image">Project Thumbnail</label>
 				<input id="image" type="file" bind:files />
 			</div>
 
@@ -110,6 +133,14 @@
 		align-items: center;
 		min-height: 100vh;
 		max-width: none;
+	}
+
+	.visibility-item {
+		display: inline-block;
+	}
+
+	.visibility-text {
+		margin-left: 10px;
 	}
 
 	.input-form {
@@ -146,7 +177,7 @@
 		margin-bottom: 20px;
 	}
 
-	label {
+	label.section-label {
 		display: block;
 		font-size: 14px;
 		margin-bottom: 5px;
