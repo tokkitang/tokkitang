@@ -95,6 +95,7 @@
 						class="visibility-input"
 						type="radio"
 						name="project-visibility"
+						checked
 						on:change={() => {
 							isPublic = false;
 						}}
