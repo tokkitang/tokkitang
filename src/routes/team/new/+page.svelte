@@ -5,18 +5,15 @@
 	import { movePage } from '../../../lib/utils/movePage';
 	import { isLoading } from '../../../lib/store';
 
-	export let teamName: string | null = null;
-	export let description: string | null = null;
+	export let teamName: string = '';
+	export let description: string = '';
 	export let thumbnail_url: string | null = null;
 	export let files: FileList | null = null;
 
 	export async function create() {
 		try {
-			if (!teamName) {
-				alert('닉네임을 입력해주세요');
-			}
-			if (!description) {
-				alert('이메일을 입력해주세요');
+			if (teamName == '') {
+				alert('팀 이름을 입력해주세요');
 			}
 
 			if (files !== null && files?.[0] !== null) {
@@ -31,7 +28,7 @@
 					return;
 				}
 
-				const signupResponse = await createTeam(accessToken, teamName, description, thumbnail_url);
+				const teamResponse = await createTeam(accessToken, teamName, description, thumbnail_url);
 
 				alert('팀 생성에 성공했습니다.');
 				movePage('/mypage');
