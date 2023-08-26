@@ -7,8 +7,8 @@
 	import { movePage } from '../../../lib/utils/movePage';
 
 	export let teamId = $page.url.searchParams.get('team_id');
-	export let name: string | null = null;
-	export let description: string | null = null;
+	export let name: string = '';
+	export let description: string = '';
 	export let thumbnail_url: string | null = null;
 	export let files: FileList | null = null;
 
@@ -16,11 +16,8 @@
 
 	export async function create() {
 		try {
-			if (!name) {
+			if (name == '') {
 				alert('이름을 입력해주세요');
-			}
-			if (!description) {
-				alert('설명을 입력해주세요');
 			}
 
 			if (!teamId) {
