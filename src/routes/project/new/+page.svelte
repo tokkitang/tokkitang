@@ -7,8 +7,9 @@
 	import { movePage } from '../../../lib/utils/movePage';
 
 	export let teamId = $page.url.searchParams.get('team_id');
-	export let name: string | null = null;
-	export let description: string | null = null;
+	export let name: string = '';
+	export let description: string = '';
+	export let isPublic: boolean = false;
 	export let thumbnail_url: string | null = null;
 	export let files: FileList | null = null;
 
@@ -16,11 +17,8 @@
 
 	export async function create() {
 		try {
-			if (!name) {
+			if (name == '') {
 				alert('이름을 입력해주세요');
-			}
-			if (!description) {
-				alert('설명을 입력해주세요');
 			}
 
 			if (!teamId) {
@@ -44,7 +42,7 @@
 					return;
 				}
 
-				await createProject(accessToken, teamId, name, description, thumbnail_url);
+				await createProject(accessToken, teamId, name, description, isPublic, thumbnail_url);
 
 				alert('프로젝트 생성에 성공했습니다.');
 				movePage(`/team/${teamId}`);
@@ -77,17 +75,48 @@
 	<form class="input-form">
 		<div class="normal-input">
 			<h1>New Project</h1>
+
 			<div class="name-div form-control">
-				<label for="name">Project Name</label>
+				<label class="section-label" for="name">Project Name</label>
 				<input id="name" type="text" bind:value={name} />
 			</div>
+
 			<div class="description-div form-control">
-				<label for="description">Description</label>
+				<label class="section-label" for="description">Description</label>
 				<input id="description" type="text" bind:value={description} />
 			</div>
 
+			<div class="public-div form-control">
+				<label class="section-label" for="image">Project Visibility</label>
+
+				<span class="visibility-item visibility-text"> Private </span>
+				<span class="visibility-item">
+					<input
+						class="visibility-input"
+						type="radio"
+						name="project-visibility"
+						checked
+						on:change={() => {
+							isPublic = false;
+						}}
+					/>
+				</span>
+
+				<span class="visibility-item visibility-text"> Public </span>
+				<span class="visibility-item">
+					<input
+						class="visibility-input"
+						type="radio"
+						name="project-visibility"
+						on:change={() => {
+							isPublic = true;
+						}}
+					/>
+				</span>
+			</div>
+
 			<div class="image-div form-control">
-				<label for="image">Project Thumbnail</label>
+				<label class="section-label" for="image">Project Thumbnail</label>
 				<input id="image" type="file" bind:files />
 			</div>
 
@@ -105,6 +134,14 @@
 		align-items: center;
 		min-height: 100vh;
 		max-width: none;
+	}
+
+	.visibility-item {
+		display: inline-block;
+	}
+
+	.visibility-text {
+		margin-left: 10px;
 	}
 
 	.input-form {
@@ -141,7 +178,7 @@
 		margin-bottom: 20px;
 	}
 
-	label {
+	label.section-label {
 		display: block;
 		font-size: 14px;
 		margin-bottom: 5px;
