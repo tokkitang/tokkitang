@@ -7,6 +7,7 @@
 	import type { Team } from '../../lib/types/Team';
 	import { getMyTeamList } from '../../lib/api/team/get-my-team-list';
 	import TeamList from '../../lib/components/TeamList.svelte';
+	import Logout from '../../lib/components/Logout.svelte';
 	import CreateTeamButton from '../../lib/components/CreateTeamButton.svelte';
 	import { page } from '$app/stores';
 
@@ -18,6 +19,7 @@
 </script>
 
 <div class="container">
+	<Logout />
 	<div class="profile">
 		{#if myInfo?.thumbnail_url}
 			<img class="profile-image" src={myInfo?.thumbnail_url} alt="" />
