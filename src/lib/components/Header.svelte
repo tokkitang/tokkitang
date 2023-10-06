@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import logo from '$lib/images/rabbit-logo.svg';
 	import profilePlaceholder from '$lib/images/profile-placeholder.svg';
+	import settingIcon from '$lib/images/setting.svg';
 	import login from '$lib/images/login.svg';
 	import { onMount } from 'svelte';
 	import { movePage } from '../utils/movePage';
@@ -10,6 +11,7 @@
 	export const accessToken: string | null = $page.data.accessToken;
 	export const isLogin: boolean = $page.data.isLogin;
 	export const myUserInfo: User | null = $page.data.myUserInfo;
+	export const onProjectPage: boolean = $page.data.onProjectPage;
 
 	onMount(async () => {
 		console.log('$page.data', $page.data);
@@ -51,7 +53,16 @@
 		</svg>
 	</nav>
 
-	<div class="corner">
+	<div class="corner right">
+		{#if onProjectPage}
+			<a
+				on:click={() => {
+					alert('asdf');
+				}}
+			>
+				<img class="thumb" src={settingIcon} alt="GitHub" />
+			</a>
+		{/if}
 		{#if isLogin}
 			<a href="/mypage">
 				{#if myUserInfo?.thumbnail_url}
@@ -80,14 +91,23 @@
 	}
 
 	.corner {
-		width: 3em;
-		height: 3em;
+		margin: 0.5em;
+		width: 2em;
+		height: 2em;
+	}
+
+	.corner.right {
+		margin: 0.5em;
+		width: 6em;
+		height: 2em;
+		display: flex;
+		flex-direction: row;
 	}
 
 	.corner a {
 		display: flex;
 		align-items: center;
-		justify-content: center;
+		justify-content: flex-end;
 		width: 100%;
 		height: 100%;
 	}

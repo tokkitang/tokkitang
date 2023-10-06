@@ -48,6 +48,7 @@ export async function load(page: RequestEvent) {
 		error,
 		entityList,
 		noteList,
-		projectId
+		projectId,
+		onProjectPage: true
 	};
 }
